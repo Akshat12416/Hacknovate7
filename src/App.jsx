@@ -8,14 +8,6 @@ function App() {
   const position = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Preload background image
-    const imageUrl = "/light.jpg";
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.as = "image";
-    link.href = imageUrl;
-    document.head.appendChild(link);
-
     // Inject Devfolio script
     const script = document.createElement("script");
     script.src = "https://apply.devfolio.co/v2/sdk.js";
@@ -44,7 +36,6 @@ function App() {
     animate();
 
     return () => {
-      document.head.removeChild(link);
       document.body.removeChild(script);
       document.removeEventListener("mousemove", moveMouse);
     };
@@ -85,6 +76,8 @@ function App() {
             src="/logo_website.png"
             alt="Text Logo"
             className="text-logo"
+            loading="eager"
+            decoding="async"
           />
         </div>
       </header>
@@ -95,6 +88,8 @@ function App() {
           src="/website_logo_final.png"
           alt="Hacknovate 7.0 Logo"
           className="main-logo"
+          loading="lazy"
+          decoding="async"
         />
 
         <p className="tagline">WEBSITE COMING SOON</p>
