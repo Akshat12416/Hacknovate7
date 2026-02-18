@@ -60,14 +60,6 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!document.querySelector('script[src="https://apply.devfolio.co/v2/sdk.js"]')) {
-      const script = document.createElement("script");
-      script.src = "https://apply.devfolio.co/v2/sdk.js";
-      script.async = true;
-      document.body.appendChild(script);
-    }
-  }, []);
 
   return (
     <div className="hero">
