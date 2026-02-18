@@ -60,6 +60,16 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (window.Devfolio && typeof window.Devfolio.init === "function") {
+        window.Devfolio.init();
+        clearInterval(interval);
+      }
+    }, 300);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="hero">
