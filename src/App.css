@@ -186,3 +186,9 @@ body {
     margin-top: -120px;
   }
 }
+
+.devfolio-logo {
+  margin-top: 20px;
+  width: 160px;
+  opacity: 0.9;
+}

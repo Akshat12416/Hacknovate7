@@ -61,6 +61,19 @@ function App() {
   }, []);
 
   useEffect(() => {
+  const script = document.createElement("script");
+  script.src = "https://apply.devfolio.co/v2/sdk.js";
+  script.async = true;
+  script.defer = true;
+  document.body.appendChild(script);
+
+  return () => {
+    document.body.removeChild(script);
+  };
+}, []);
+
+
+  useEffect(() => {
     const interval = setInterval(() => {
       if (window.Devfolio && typeof window.Devfolio.init === "function") {
         window.Devfolio.init();
@@ -112,6 +125,13 @@ function App() {
           data-button-theme="dark"
           style={{ height: "44px", width: "312px" }}
         ></div>
+        <img
+  src="/Devfolio_Logo-Colored.png"
+  alt="Devfolio Logo"
+  className="devfolio-logo"
+  loading="lazy"
+/>
+        
       </div>
     </div>
   );
