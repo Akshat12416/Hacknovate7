@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import "./App.css";
 
 function App() {
-  const [cursorPosition, setCursorPosition] = useState({ x: -100, y: -100 });
+  const cursorRef = useRef(null);
+  const mouse = useRef({ x: 0, y: 0 });
+  const position = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     // Preload background image
@@ -20,30 +22,37 @@ function App() {
     script.defer = true;
     document.body.appendChild(script);
 
-    const handleMouseMove = (e) => {
-      setCursorPosition({ x: e.clientX, y: e.clientY });
+    const moveMouse = (e) => {
+      mouse.current.x = e.clientX;
+      mouse.current.y = e.clientY;
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mousemove", moveMouse);
+
+    const animate = () => {
+      position.current.x += (mouse.current.x - position.current.x) * 0.15;
+      position.current.y += (mouse.current.y - position.current.y) * 0.15;
+
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate(${position.current.x - 15}px, ${position.current.y - 15}px)`;
+      }
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
 
     return () => {
       document.head.removeChild(link);
       document.body.removeChild(script);
-      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mousemove", moveMouse);
     };
   }, []);
 
   return (
     <div className="hero">
       {/* Custom Cursor */}
-      <div
-        className="custom-cursor"
-        style={{
-          transform: `translate(${cursorPosition.x - 15}px, ${
-            cursorPosition.y - 15
-          }px)`
-        }}
-      ></div>
+      <div ref={cursorRef} className="custom-cursor"></div>
 
       {/* Header */}
       <header className="app-header">
