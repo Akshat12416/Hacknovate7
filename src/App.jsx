@@ -8,12 +8,13 @@ function App() {
   const position = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Inject Devfolio script
-    const script = document.createElement("script");
-    script.src = "https://apply.devfolio.co/v2/sdk.js";
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
+    // Preload background image
+    const imageUrl = "/light.jpg";
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
+    link.href = imageUrl;
+    document.head.appendChild(link);
 
     const moveMouse = (e) => {
       mouse.current.x = e.clientX;
@@ -36,7 +37,7 @@ function App() {
     animate();
 
     return () => {
-      document.body.removeChild(script);
+      document.head.removeChild(link);
       document.removeEventListener("mousemove", moveMouse);
     };
   }, []);
@@ -59,7 +60,15 @@ function App() {
     };
   }, []);
 
-  
+  useEffect(() => {
+    if (!document.querySelector('script[src="https://apply.devfolio.co/v2/sdk.js"]')) {
+      const script = document.createElement("script");
+      script.src = "https://apply.devfolio.co/v2/sdk.js";
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+
   return (
     <div className="hero">
       {/* Custom Cursor */}

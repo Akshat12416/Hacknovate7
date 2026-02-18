@@ -119,8 +119,48 @@ body {
   font-family: 'ITC Benguiat Std', serif;
 }
 
-.apply-button {
-  margin-top: 30px;
+.static-apply-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: 12px;
+  background-image: linear-gradient(to right, #3b82f6, #2563eb);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  margin-top: 30px; /* Desktop margin-top from old .apply-button */
+  font-family: 'Cinzel', serif; /* Keep font consistent */
+}
+
+.static-apply-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.devfolio-icon {
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  border-radius: 4px;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Creating the "D" inside the icon */
+.devfolio-icon::before {
+  content: 'D';
+  color: #2563eb;
+  font-weight: bold;
+  font-size: 16px;
+  font-family: sans-serif; /* Use a standard font for the 'D' */
 }
 
 /* Responsive */
@@ -138,8 +178,8 @@ body {
     font-size: 1.5rem;
   }
 
-  .apply-button {
-    margin-top: 80px;
+  .static-apply-button {
+    margin-top: 80px; /* Mobile margin-top from old .apply-button */
   }
 
   .hero-content {
