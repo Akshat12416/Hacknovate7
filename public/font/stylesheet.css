@@ -1,0 +1,78 @@
+@font-face {
+    font-family: 'ITC Benguiat Std';
+    src: url('BenguiatStd-BoldItalic.eot');
+    src: local('ITC Benguiat Std Bold Italic'), local('BenguiatStd-BoldItalic'),
+        url('BenguiatStd-BoldItalic.eot?#iefix') format('embedded-opentype'),
+        url('BenguiatStd-BoldItalic.woff2') format('woff2'),
+        url('BenguiatStd-BoldItalic.woff') format('woff'),
+        url('BenguiatStd-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'ITC Benguiat Std';
+    src: url('BenguiatStd-MediumItalic.eot');
+    src: local('ITC Benguiat Std Medium Italic'), local('BenguiatStd-MediumItalic'),
+        url('BenguiatStd-MediumItalic.eot?#iefix') format('embedded-opentype'),
+        url('BenguiatStd-MediumItalic.woff2') format('woff2'),
+        url('BenguiatStd-MediumItalic.woff') format('woff'),
+        url('BenguiatStd-MediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'ITC Benguiat Std';
+    src: url('BenguiatStd-BookItalic.eot');
+    src: local('ITC Benguiat Std Book Italic'), local('BenguiatStd-BookItalic'),
+        url('BenguiatStd-BookItalic.eot?#iefix') format('embedded-opentype'),
+        url('BenguiatStd-BookItalic.woff2') format('woff2'),
+        url('BenguiatStd-BookItalic.woff') format('woff'),
+        url('BenguiatStd-BookItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'ITC Benguiat Std';
+    src: url('BenguiatStd-Medium.eot');
+    src: local('ITC Benguiat Std Medium'), local('BenguiatStd-Medium'),
+        url('BenguiatStd-Medium.eot?#iefix') format('embedded-opentype'),
+        url('BenguiatStd-Medium.woff2') format('woff2'),
+        url('BenguiatStd-Medium.woff') format('woff'),
+        url('BenguiatStd-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'ITC Benguiat Std';
+    src: url('BenguiatStd-Book.eot');
+    src: local('ITC Benguiat Std Book'), local('BenguiatStd-Book'),
+        url('BenguiatStd-Book.eot?#iefix') format('embedded-opentype'),
+        url('BenguiatStd-Book.woff2') format('woff2'),
+        url('BenguiatStd-Book.woff') format('woff'),
+        url('BenguiatStd-Book.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'ITC Benguiat Std';
+    src: url('BenguiatStd-Bold.eot');
+    src: local('ITC Benguiat Std Bold'), local('BenguiatStd-Bold'),
+        url('BenguiatStd-Bold.eot?#iefix') format('embedded-opentype'),
+        url('BenguiatStd-Bold.woff2') format('woff2'),
+        url('BenguiatStd-Bold.woff') format('woff'),
+        url('BenguiatStd-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
