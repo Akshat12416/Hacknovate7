@@ -1,0 +1,418 @@
+/* ─── CardScrollAnimation — Scoped Styles ──────────────────────────────── */
+
+/* ─── CardScrollAnimation — Scoped Styles ──────────────────────────────── */
+.card-scroll-root {
+    --card-bg: #0d0d0d;
+    --card-fg: #f0ede6;
+    --card-1: #c8a96e;
+    --card-2: #6e8fc8;
+    --card-3: #8fc86e;
+    font-family: "ITC Benguiat Std", serif;
+    color: var(--card-fg);
+    position: relative;
+    overflow: hidden;
+    background: transparent !important;
+    will-change: opacity;
+}
+
+.card-scroll-bg {
+    position: absolute;
+    inset: -20px;
+    background-image: url('/assets/prizes/prize_.jpeg');
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px);
+    z-index: 1;
+    pointer-events: none;
+    transform: scale(1.05) translateZ(0);
+}
+
+.card-scroll-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.card-scroll-root h1 {
+    font-size: 4rem;
+    font-weight: 500;
+    line-height: 1;
+    z-index: 5;
+}
+
+/* ─── Sections ───────────────────────────────────────────────────────────── */
+.card-scroll-root .card-section {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    padding: 2rem;
+    z-index: 10;
+}
+
+/* ─── Sticky section ─────────────────────────────────────────────────────── */
+.card-scroll-root .sticky {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    gap: 2rem;
+}
+
+/* ─── Cards Heading ───────────────────────────────────────────────────────── */
+.card-scroll-root .cards-heading {
+    position: absolute;
+    top: 1.5rem;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 60;
+    /* Elevated to stay above SectionDivider */
+    pointer-events: none;
+}
+
+.card-scroll-root .cards-heading h2 {
+    font-family: "ITC Benguiat Std", serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: bold;
+    font-style: normal;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-shadow:
+        0 0 30px rgba(200, 30, 30, 0.6),
+        0 0 60px rgba(200, 30, 30, 0.3);
+    margin: 0;
+    line-height: 1;
+}
+
+/* ─── Card container ─────────────────────────────────────────────────────── */
+.card-scroll-root .card-container {
+    position: relative;
+    width: 58%;
+    display: flex;
+    perspective: 1200px;
+    will-change: width, gap;
+}
+
+/* ─── Cards ──────────────────────────────────────────────────────────────── */
+.card-scroll-root .card {
+    position: relative;
+    flex: 1;
+    aspect-ratio: 2 / 3;
+    transform-style: preserve-3d;
+    transform-origin: top;
+    will-change: transform, border-radius;
+}
+
+.card-scroll-root #card-1 {
+    border-radius: 18px 0 0 18px;
+}
+
+.card-scroll-root #card-3 {
+    border-radius: 0 18px 18px 0;
+}
+
+.card-scroll-root .card-front,
+.card-scroll-root .card-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: inherit;
+    overflow: hidden;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    mask-image: radial-gradient(white, black);
+}
+
+.card-scroll-root .card-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: inherit;
+    overflow: hidden;
+    transform: rotateY(180deg);
+    color: white;
+}
+
+/* Shared blur treatment for both back-image variants */
+.card-scroll-root .back-image {
+    filter: blur(8px);
+    z-index: 1;
+    transform: scale(1.1);
+    object-fit: cover;
+    object-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Desktop back-image */
+.card-scroll-root .back-image-desktop {
+    display: block;
+}
+
+/* Mobile back-image */
+.card-scroll-root .back-image-mobile {
+    display: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.card-scroll-root .back-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 2;
+}
+
+.card-scroll-root .back-content {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    /* Consistently balanced padding */
+}
+
+.card-scroll-root .back-content p {
+    font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.2;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    text-wrap: balance;
+    width: 100%;
+}
+
+.card-scroll-root .back-content span {
+    opacity: 0.5;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+}
+
+.card-scroll-root .back-content h2 {
+    font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+    font-weight: bold;
+    margin: 0;
+    line-height: 1.1;
+    text-align: center;
+    text-wrap: balance;
+    width: 100%;
+}
+
+/* Card Slices (Desktop-only decorative overlay — always hidden on mobile) */
+.card-scroll-root .card-slices {
+    display: none;
+}
+
+/* Individual slice — must not tile */
+.card-scroll-root .slice {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+}
+
+/* ─── Image Switching: Desktop vs Mobile/Tablet ──────────────────────────── */
+.card-scroll-root .card-front-mobile-img {
+    display: none !important;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.card-scroll-root .card-front-desktop-img {
+    display: block !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE — TABLET & MOBILE  (≤ 1000px)
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 1000px) {
+    .card-scroll-root h1 {
+        font-size: clamp(1.75rem, 5vw + 0.5rem, 3rem);
+    }
+
+    .card-scroll-root::before {
+        background-attachment: scroll;
+    }
+
+    .card-scroll-root .card-scroll-bg {
+        background-image: url('/assets/prizes/bg4.jpg');
+    }
+
+    .card-scroll-root .card-section {
+        height: 100dvh;
+        padding: 1.5rem;
+    }
+
+    .card-scroll-root .sticky {
+        padding: 1.5rem;
+        padding-top: 2rem;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .card-scroll-root .cards-heading {
+        position: relative;
+        top: auto;
+        left: auto;
+        width: 100%;
+        text-align: center;
+        padding-bottom: 0.5rem;
+    }
+
+    .card-scroll-root .card-container {
+        width: 100%;
+        max-width: 380px;
+        flex: 1;
+        min-height: 0;
+        flex-direction: column;
+        gap: 0;
+        perspective: none;
+        overflow: hidden;
+    }
+
+    .card-scroll-root .card {
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+        aspect-ratio: auto;
+        perspective: 1200px;
+        touch-action: pan-y;
+        border-radius: 0;
+    }
+
+    .card-scroll-root #card-1 {
+        border-radius: 12px 12px 0 0;
+    }
+
+    .card-scroll-root #card-2 {
+        border-radius: 0;
+    }
+
+    .card-scroll-root #card-3 {
+        border-radius: 0 0 12px 12px;
+    }
+
+    .card-scroll-root .card-front,
+    .card-scroll-root .card-back {
+        border-radius: inherit;
+        overflow: hidden;
+    }
+
+    .card-scroll-root .card-front {
+        z-index: 2;
+        transform: rotateY(0deg);
+        display: flex;
+        position: absolute;
+        inset: 0;
+    }
+
+    .card-scroll-root .card-front-mobile-img {
+        display: block !important;
+        object-fit: cover;
+        object-position: center;
+        width: 100% !important;
+        height: 100% !important;
+        position: absolute !important;
+        inset: 0 !important;
+    }
+
+    .card-scroll-root .card-front-desktop-img {
+        display: none !important;
+    }
+
+    .card-scroll-root .card-slices {
+        display: none;
+    }
+
+    .card-scroll-root .card-back {
+        z-index: 1;
+        opacity: 1 !important;
+        pointer-events: auto;
+    }
+
+    .card-scroll-root .back-image-desktop {
+        display: none !important;
+    }
+
+    .card-scroll-root .back-image-mobile {
+        display: block !important;
+    }
+
+    .card-scroll-root .card-back p {
+        font-size: clamp(1.2rem, 4vw, 1.6rem);
+        padding: 0 1rem;
+        line-height: 1.4;
+    }
+}
+
+@media (max-width: 600px) {
+    .card-scroll-root .card-container {
+        max-width: 260px;
+    }
+}
+
+@media (max-width: 400px) {
+    .card-scroll-root h1 {
+        font-size: clamp(1.35rem, 5vw, 1.75rem);
+    }
+
+    .card-scroll-root .card-container {
+        max-width: 220px;
+    }
+
+    .card-scroll-root .card-back span {
+        top: 1rem;
+        left: 1rem;
+        font-size: 0.85rem;
+    }
+
+    .card-scroll-root .card-back p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 1000px) and (orientation: landscape) {
+    .card-scroll-root .card-section {
+        height: auto;
+        min-height: 100dvh;
+    }
+
+    .card-scroll-root .card {
+        aspect-ratio: 16 / 9;
+        max-height: 50vh;
+    }
+
+    .card-scroll-root .card-container {
+        max-width: 500px;
+    }
+}

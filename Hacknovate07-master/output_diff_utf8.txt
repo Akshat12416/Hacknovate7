@@ -1,0 +1,295 @@
+﻿commit 5eb8764eb36bcc1ddab9fc098fa8c7b3414b6f32
+Author: Aadarshsingh16 <adarshsingh4106@gmail.com>
+Date:   Fri Feb 27 15:25:40 2026 +0530
+
+    feat: add discord and devfolio links to hero section
+
+diff --git a/src/components/stranger-things/CinematicAbout.tsx b/src/components/stranger-things/CinematicAbout.tsx
+new file mode 100644
+index 0000000..04ebc5b
+--- /dev/null
++++ b/src/components/stranger-things/CinematicAbout.tsx
+@@ -0,0 +1,282 @@
++"use client";
++import { useRef } from "react";
++import gsap from "gsap";
++import { ScrollTrigger } from "gsap/ScrollTrigger";
++import { useGSAP } from "@gsap/react";
++
++gsap.registerPlugin(ScrollTrigger);
++
++const CAMPUS_IMAGE = "/upside down.png";
++
++export function CinematicAbout() {
++    const sectionRef = useRef<HTMLDivElement>(null);
++    const stickyRef = useRef<HTMLDivElement>(null);
++    const canvasRef = useRef<HTMLCanvasElement>(null);
++    const fullBgRef = useRef<HTMLDivElement>(null);
++    const overlayRef = useRef<HTMLDivElement>(null);
++    const contentRef = useRef<HTMLDivElement>(null);
++    const eLetterRef = useRef<HTMLSpanElement>(null);
++    const eOriginRef = useRef<{ x: number; y: number }>({ x: 50, y: 50 });
++
++    const breatheRafRef = useRef<number | null>(null);
++    const breathePhaseRef = useRef<"hold1" | "hold2" | "none">("none");
++    const breatheBaseRef = useRef<number>(0.35);
++
++    useGSAP(() => {
++        const canvas = canvasRef.current;
++        if (!canvas) return;
++        const ctx = canvas.getContext("2d");
++        if (!ctx) return;
++
++        // Γ£à MODIFIED: Set start opacity to 1 immediately so there's no black screen on entry
++        gsap.set(fullBgRef.current, { opacity: 1, scale: 1 });
++        gsap.set(contentRef.current, { opacity: 0, y: 40 });
++        gsap.set(overlayRef.current, { opacity: 0 });
++
++        const measureE = () => {
++            // ... (keep measurement logic same)
++        };
++        measureE();
++
++        const resize = () => {
++            canvas.width = window.innerWidth;
++            canvas.height = window.innerHeight;
++            measureE();
++        };
++        resize();
++        window.addEventListener("resize", resize);
++
++        const runBreathe = () => {
++            breatheRafRef.current = requestAnimationFrame(runBreathe);
++            if (breathePhaseRef.current === "none") return;
++            const t = Date.now() / 1000;
++            const speed = breathePhaseRef.current === "hold1" ? 0.4 : 0.5;
++            const amplitude = breathePhaseRef.current === "hold1" ? 0.018 : 0.012;
++            const pulse = Math.sin(t * speed * Math.PI * 2) * amplitude;
++            gsap.set(overlayRef.current, { opacity: breatheBaseRef.current + pulse });
++        };
++        breatheRafRef.current = requestAnimationFrame(runBreathe);
++
++        const drawMask = (maskOpacity: number, textScale: number, blurPx = 0) => {
++            if (!ctx) return;
++            const w = canvas.width;
++            const h = canvas.height;
++            ctx.clearRect(0, 0, w, h);
++            if (maskOpacity <= 0) return;
++
++            ctx.filter = blurPx > 0.05 ? `blur(${blurPx.toFixed(2)}px)` : "none";
++            ctx.globalAlpha = maskOpacity;
++            ctx.fillStyle = "#000000";
++            ctx.fillRect(0, 0, w, h);
++
++            ctx.globalCompositeOperation = "destination-out";
++            ctx.fillStyle = "#ffffff";
++            ctx.textAlign = "center";
++            ctx.textBaseline = "middle";
++
++            const fontFamily = `'ITC Benguiat Std', serif`;
++            const topFontSize = Math.min(w * 0.10, 110);
++            const botFontSize = Math.min(w * 0.155, 165);
++            const lineGap = botFontSize * 0.10;
++            const totalH = topFontSize + lineGap + botFontSize;
++            const topY = h / 2 - totalH / 2 + topFontSize * 0.5;
++            const botY = topY + topFontSize * 0.5 + lineGap + botFontSize * 0.5;
++
++            ctx.font = `bold ${botFontSize}px ${fontFamily}`;
++            const fullWidth = ctx.measureText("ABESIT").width;
++            const beforeWidth = ctx.measureText("AB").width;
++            const eWidth = ctx.measureText("E").width;
++            const textStartX = w / 2 - fullWidth / 2;
++            const pivotX = textStartX + beforeWidth + eWidth * 0.38;
++            const pivotY = botY - botFontSize * 0.12;
++
++            ctx.save();
++            ctx.translate(pivotX, pivotY);
++            ctx.scale(textScale, textScale);
++            ctx.translate(-pivotX, -pivotY);
++            ctx.font = `bold ${topFontSize}px ${fontFamily}`;
++            ctx.fillText("ABOUT", w / 2, topY);
++            ctx.font = `bold ${botFontSize}px ${fontFamily}`;
++            ctx.fillText("ABESIT", w / 2, botY);
++            ctx.restore();
++
++            ctx.globalCompositeOperation = "source-over";
++            ctx.globalAlpha = 1;
++            ctx.filter = "none";
++        };
++
++        gsap.set(fullBgRef.current, {
++            scale: 1, y: 0,
++            transformOrigin: "50% 60%",
++            force3D: true,
++        });
++
++        const zoomTl = gsap.timeline({
++            scrollTrigger: {
++                trigger: sectionRef.current,
++                start: "50% top",
++                end: "bottom+=80% top",
++                scrub: 4,
++                anticipatePin: 1,
++                invalidateOnRefresh: true,
++            },
++        });
++        zoomTl.to(fullBgRef.current, {
++            scale: 8.5,
++            y: -1200,
++            transformOrigin: "50% 78%",
++            ease: "none",
++            force3D: true,
++        });
++
++        ScrollTrigger.create({
++            trigger: sectionRef.current,
++            start: "top top",
++            end: "bottom bottom",
++            scrub: 2,
++            anticipatePin: 1,
++            onUpdate: (self) => {
++                const p = self.progress;
++                // Γ£à MODIFIED: Image always 1 (visible) to prevent black screen gap
++                const imageOpacity = 1;
++                gsap.set(fullBgRef.current, { opacity: imageOpacity });
++                const maskOpacity =
++                      p < 0.48 ? 1
++                    : p < 0.55 ? 1 - (p - 0.48) / 0.07
++                    : 0;
++
++                const introRaw = Math.max(0, Math.min(1, (p - 0.05) / 0.10));
++                const introProgress = introRaw * introRaw * (3 - 2 * introRaw);
++                
++                // Reduced initial blur since we are showing it immediately
++                const blurPx = p < 0.16 ? (1 - introProgress) * 0.5 : 0;
++
++                let textScale = 0.95 + introProgress * 0.05;
++                if (p > 0.44) {
++                    const zoomP = Math.min(1, (p - 0.44) / 0.22);
++                    textScale = 1 + Math.pow(zoomP, 2.2) * 400;
++                }
++                drawMask(maskOpacity, textScale, blurPx);
++
++                // Content fade (kept same)
++                const contentOpacity =
++                    p < 0.68 ? 0
++                    : p < 0.78 ? (p - 0.68) / 0.10
++                    : p < 0.88 ? 1
++                    : Math.max(0, 1 - (p - 0.88) / 0.10);
++
++                const contentY =
++                    p < 0.68 ? 40
++                    : p < 0.78 ? 40 * (1 - (p - 0.68) / 0.10)
++                    : 0;
++
++                gsap.set(contentRef.current, { opacity: contentOpacity, y: contentY });
++            },
++        });
++
++        return () => {
++            window.removeEventListener("resize", resize);
++            if (breatheRafRef.current) cancelAnimationFrame(breatheRafRef.current);
++        };
++    }, { scope: sectionRef });
++
++    return (
++        <section
++            ref={sectionRef}
++            className="relative bg-gradient-to-b from-red-950 via-black to-red-950"
++            style={{ height: "200vh" }}
++        >
++            <div
++                ref={stickyRef}
++                className="sticky top-0 h-screen w-full overflow-hidden bg-black"
++            >
++                <div className="absolute inset-0 z-[0] bg-black" />
++
++                <div
++                    ref={fullBgRef}
++                    className="absolute inset-0 z-[2] will-change-transform"
++                    style={{ willChange: "transform, opacity", transform: "translateZ(0)" }}
++                >
++                    <img
++                        src={CAMPUS_IMAGE}
++                        alt="ABESIT Campus Full"
++                        className="absolute inset-0 w-full h-full object-cover"
++                        style={{ objectPosition: "center 50%" }}
++                    />
++                    <div
++                        className="absolute inset-0 pointer-events-none"
++                        style={{
++                            background:
++                                "radial-gradient(ellipse at center, transparent 30%, rgba(100,0,0,0.35) 100%)",
++                        }}
++                    />
++                </div>
++
++                <canvas
++                    ref={canvasRef}
++                    className="absolute inset-0 z-[3] pointer-events-none"
++                />
++
++                <div
++                    ref={overlayRef}
++                    className="absolute inset-0 z-[4] bg-black pointer-events-none"
++                    style={{ opacity: 0 }}
++                />
++
++                <div
++                    ref={contentRef}
++                    className="absolute inset-0 z-[5] flex flex-col items-center justify-center text-white pointer-events-none select-none opacity-0"
++                >
++                    <p
++                        className="uppercase tracking-[0.5em] text-[10px] md:text-xs text-red-500 font-semibold mb-5"
++                        style={{ fontFamily: "'Inter', sans-serif" }}
++                    >
++                        Est. 2007 ┬╖ Ghaziabad, India
++                    </p>
++
++                    <h2
++                        className="text-center font-black uppercase leading-none mb-4"
++                        style={{
++                            fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
++                            fontSize: "clamp(2.8rem, 9vw, 8rem)",
++                            letterSpacing: "-0.025em",
++                            textShadow: "0 4px 60px rgba(0,0,0,0.8)",
++                        }}
++                    >
++                        ABESIT
++                    </h2>
++
++                    <div className="w-20 h-[2px] bg-gradient-to-r from-red-700 via-red-500 to-red-700 mb-6" />
++
++                    <p
++                        className="text-white/90 text-sm md:text-base lg:text-lg max-w-2xl text-center leading-relaxed px-6"
++                        style={{ fontFamily: "'ITC Benguiat Std', serif", fontWeight: "normal" }}
++                    >
++                        ABES Institute of Technology (ABESIT), affiliated with Dr. A.P.J. Abdul Kalam
++                        Technical University, Lucknow, is a premier technical institution located in
++                        Ghaziabad, Uttar Pradesh.
++                        <br /><br />
++                        Since its establishment in 2007, the institute has
++                        focused on delivering quality technical education while fostering innovation,
++                        research, and industry-oriented learning.
++                    </p>
++
++                    <div className="flex gap-2 mt-8">
++                        {[0, 1, 2].map((i) => (
++                            <span
++                                key={i}
++                                className="block rounded-full bg-red-600"
++                                style={{
++                                    width: i === 1 ? "24px" : "6px",
++                                    height: "6px",
++                                    opacity: i === 1 ? 1 : 0.4,
++                                }}
++                            />
++                        ))}
++                    </div>
++                </div>
++
++            </div>
++        </section>
++    );
++}
+\ No newline at end of file
