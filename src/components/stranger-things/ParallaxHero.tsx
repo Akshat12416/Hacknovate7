@@ -100,9 +100,10 @@ export function ParallaxHero() {
 
     return (
         <div
-            ref={containerRef}
-            onMouseMove={handleMouseMove}
-            className="relative h-screen w-full overflow-hidden bg-black"
+            id="hero"
+    ref={containerRef}
+    onMouseMove={handleMouseMove}
+    className="relative h-screen w-full overflow-hidden bg-black"
         >
 
             <div ref={navLogoRef} className="absolute top-0 left-0 pl-4 md:pl-6 pt-2 md:pt-4 z-50">

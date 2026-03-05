@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 interface NavbarProps {
     isMenuOpen: boolean;
     setIsMenuOpen: (isOpen: boolean) => void;
-    alwaysVisible?: boolean; // Skip scroll-reveal for sub-pages
+    alwaysVisible?: boolean;
 }
 
 const NAV_LINKS = [
@@ -31,6 +31,8 @@ export function Navbar({ isMenuOpen, setIsMenuOpen, alwaysVisible = false }: Nav
         const nav = navContainerRef.current;
         const mobileNav = mobileNavRef.current;
 
+        const isMobile = window.innerWidth < 768;
+
         // Initialize icons
         gsap.set(xIconRef.current, { opacity: 0, scale: 0, rotation: -90 });
         gsap.set(menuIconRef.current, { opacity: 1, scale: 1, rotation: 0 });
@@ -40,71 +42,111 @@ export function Navbar({ isMenuOpen, setIsMenuOpen, alwaysVisible = false }: Nav
             return;
         }
 
-        // 1. Initial State: Hidden
+        /* ---------------- MOBILE LOGIC (SCROLL LISTENER) ---------------- */
+
+        if (isMobile) {
+            gsap.set(mobileNav, { opacity: 1, y: 0 });
+
+            let lastScroll = window.scrollY;
+
+            const handleScroll = () => {
+                const currentScroll = window.scrollY;
+
+                if (currentScroll > lastScroll && currentScroll > 50) {
+                    // scrolling down
+                    gsap.to(mobileNav, {
+                        y: -100,
+                        opacity: 0,
+                        duration: 0.3,
+                        overwrite: "auto"
+                    });
+                } else {
+                    // scrolling up
+                    gsap.to(mobileNav, {
+                        y: 0,
+                        opacity: 1,
+                        pointerEvents: "auto",
+                        duration: 0.3,
+                        overwrite: "auto"
+                    });
+                }
+
+                lastScroll = currentScroll;
+            };
+
+            window.addEventListener("scroll", handleScroll);
+
+            return () => {
+                window.removeEventListener("scroll", handleScroll);
+            };
+        }
+
+        /* ---------------- DESKTOP LOGIC (UNCHANGED) ---------------- */
+
         gsap.set([nav, mobileNav], { opacity: 0, y: -20, pointerEvents: "none" });
 
-        const isMobile = window.innerWidth < 768;
-        const heroHeight = window.innerHeight;
-
-        // 2. Main Scroll Control
         ScrollTrigger.create({
             start: "top top",
             end: "bottom bottom",
             onUpdate: (self) => {
                 const scrollY = self.scroll();
-                const direction = self.direction; // 1 = down, -1 = up
+                const direction = self.direction;
 
-                // Mobile Rule: Only show during Hero (0 to ~100vh)
-                if (isMobile) {
-                    if (scrollY > heroHeight * 0.95) {
-                        gsap.to([nav, mobileNav], {
-                            opacity: 0,
-                            y: -100,
-                            pointerEvents: "none",
-                            duration: 0.4,
-                            overwrite: "auto"
-                        });
-                        return;
-                    }
-
-                    // Normal show/hide logic for mobile while inside Hero
-                    if (direction === 1 && scrollY > 50) {
-                        gsap.to([nav, mobileNav], { y: -100, opacity: 0, duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
-                    } else {
-                        gsap.to([nav, mobileNav], { y: 0, opacity: 1, pointerEvents: "auto", scale: 1, duration: 0.4, ease: "power3.out", overwrite: "auto" });
-                    }
-                    return;
-                }
-
-                // Desktop Logic (Unaltered)
                 const portalThreshold = 3000;
+
                 if (scrollY < portalThreshold) {
-                    gsap.to([nav, mobileNav], {
+                    gsap.to(nav, {
                         opacity: 0,
                         y: -30,
                         pointerEvents: "none",
                         duration: 0.3,
                         overwrite: "auto"
                     });
-                }
-                // Segment B: Active Area (Desktop)
-                else {
+                } else {
                     const footer = document.querySelector("footer");
                     const footerPos = footer ? footer.getBoundingClientRect().top : Infinity;
                     const isNearFooter = footerPos < 400;
 
                     if (isNearFooter) {
-                        gsap.to([nav, mobileNav], { opacity: 0, scale: 0.95, pointerEvents: "none", duration: 0.4, overwrite: "auto" });
+                        gsap.to(nav, {
+                            opacity: 0,
+                            scale: 0.95,
+                            pointerEvents: "none",
+                            duration: 0.4,
+                            overwrite: "auto"
+                        });
                     } else if (isMenuOpen) {
-                        gsap.to([nav, mobileNav], { opacity: 1, y: 0, scale: 1, pointerEvents: "auto", duration: 0.4, overwrite: "auto" });
+                        gsap.to(nav, {
+                            opacity: 1,
+                            y: 0,
+                            scale: 1,
+                            pointerEvents: "auto",
+                            duration: 0.4,
+                            overwrite: "auto"
+                        });
                     } else if (direction === 1) {
-                        gsap.to([nav, mobileNav], { y: -100, opacity: 0, duration: 0.4, ease: "power2.inOut", overwrite: "auto" });
+                        gsap.to(nav, {
+                            y: -100,
+                            opacity: 0,
+                            duration: 0.4,
+                            ease: "power2.inOut",
+                            overwrite: "auto"
+                        });
                     } else {
-                        gsap.to([nav, mobileNav], { y: 0, opacity: 1, pointerEvents: "auto", scale: 1, duration: 0.4, ease: "power3.out", overwrite: "auto" });
+                        gsap.to(nav, {
+                            y: 0,
+                            opacity: 1,
+                            pointerEvents: "auto",
+                            scale: 1,
+                            duration: 0.4,
+                            ease: "power3.out",
+                            overwrite: "auto"
+                        });
                     }
                 }
             }
         });
+
     }, [alwaysVisible, isMenuOpen]);
 
     const handleMenuToggle = () => {
@@ -129,16 +171,13 @@ export function Navbar({ isMenuOpen, setIsMenuOpen, alwaysVisible = false }: Nav
 
     return (
         <div className="contents">
-            {/* ── Desktop Nav ── */}
+            {/* Desktop Nav */}
             <div className="hidden md:flex fixed inset-x-0 top-6 z-[100] justify-center">
                 <div
                     ref={navContainerRef}
                     className="whitespace-nowrap bg-white/5 md:backdrop-blur-lg border border-white/10 rounded-full h-16 flex items-center justify-center pointer-events-auto shadow-[0_8px_32px_rgba(0,0,0,0.5)] px-8 lg:px-12"
                 >
-                    <nav
-                        className="flex gap-8 lg:gap-12"
-                        style={{ fontFamily: "'ITC Benguiat Std', serif" }}
-                    >
+                    <nav className="flex gap-8 lg:gap-12" style={{ fontFamily: "'ITC Benguiat Std', serif" }}>
                         {NAV_LINKS.map((link) => (
                             <a
                                 key={link.label}
@@ -152,7 +191,7 @@ export function Navbar({ isMenuOpen, setIsMenuOpen, alwaysVisible = false }: Nav
                 </div>
             </div>
 
-            {/* ── Mobile Nav ── */}
+            {/* Mobile Nav */}
             <div ref={mobileNavRef} className="fixed top-0 inset-x-0 w-full md:hidden z-[100]">
                 <div className="flex justify-end items-center p-6">
                     <button
@@ -169,13 +208,13 @@ export function Navbar({ isMenuOpen, setIsMenuOpen, alwaysVisible = false }: Nav
                         ref={mobileMenuRef}
                         className="absolute top-0 left-0 w-full bg-black border-b border-white/10 overflow-hidden"
                     >
-                        {/* Close button inside the menu */}
                         <button
                             onClick={handleMenuToggle}
                             className="absolute top-6 right-6 w-12 h-12 bg-white/10 border border-white/20 rounded-full text-white flex items-center justify-center shadow-lg active:scale-95 transition-transform z-10"
                         >
                             <X size={24} />
                         </button>
+
                         <nav
                             className="flex flex-col items-start px-10 pt-28 pb-10 gap-6"
                             style={{ fontFamily: "'ITC Benguiat Std', serif" }}
