@@ -59,7 +59,7 @@ export const CountdownTimer = forwardRef<HTMLDivElement, CountdownTimerProps>(
         >
             {/* Heading */}
             <p className="text-white font-bold text-sm  lg:text-lg tracking-[0.35em] mb-3">
-                Resgistration Closing in
+                Registration Closing in
             </p>
 
             <div className="flex gap-2 md:gap-3 text-2xl md:text-4xl lg:text-5xl font-black italic tracking-tighter">
