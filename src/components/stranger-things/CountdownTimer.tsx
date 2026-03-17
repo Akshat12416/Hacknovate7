@@ -17,7 +17,7 @@ export const CountdownTimer = forwardRef<HTMLDivElement, CountdownTimerProps>(
     });
 
     useEffect(() => {
-        const targetDate = new Date("March 20, 2026 00:00:00").getTime();
+        const targetDate = new Date("March 20, 2026 23:59:00").getTime();
 
         const timer = setInterval(() => {
             const now = new Date().getTime();

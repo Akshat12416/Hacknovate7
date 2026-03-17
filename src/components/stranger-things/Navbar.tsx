@@ -11,6 +11,7 @@ interface NavbarProps {
     isMenuOpen: boolean;
     setIsMenuOpen: (isOpen: boolean) => void;
     alwaysVisible?: boolean;
+    portalThreshold?: number;
 }
 
 const NAV_LINKS = [
@@ -20,7 +21,7 @@ const NAV_LINKS = [
     { label: "Contact Us", href: "/contactus" },
 ];
 
-export function Navbar({ isMenuOpen, setIsMenuOpen, alwaysVisible = false }: NavbarProps) {
+export function Navbar({ isMenuOpen, setIsMenuOpen, alwaysVisible = false, portalThreshold = 3000 }: NavbarProps) {
     const navContainerRef = useRef<HTMLDivElement>(null);
     const mobileNavRef = useRef<HTMLDivElement>(null);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -91,8 +92,6 @@ export function Navbar({ isMenuOpen, setIsMenuOpen, alwaysVisible = false }: Nav
             onUpdate: (self) => {
                 const scrollY = self.scroll();
                 const direction = self.direction;
-
-                const portalThreshold = 3000;
 
                 if (scrollY < portalThreshold) {
                     gsap.to(nav, {
