@@ -76,6 +76,7 @@ export default function SchedulePage() {
 
     return (
         <main className="relative bg-black min-h-screen">
+            
             <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} alwaysVisible />
             <section
                 ref={sectionRef}

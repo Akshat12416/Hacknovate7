@@ -133,11 +133,11 @@ export default function ContactSection() {
       className={`${trackFont.variable} relative w-full overflow-x-hidden`}
       style={{ backgroundColor: "#050000", fontFamily: "var(--font-track), serif", minHeight: "100svh" }}
     >
+      
       {/* Navbar */}
       <div className="absolute top-0 left-0 w-full z-[100]">
         <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} alwaysVisible />
       </div>
-
       <section
         ref={sectionRef}
         className="relative w-full flex items-center justify-center overflow-hidden"

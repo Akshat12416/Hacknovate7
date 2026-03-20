@@ -5,6 +5,7 @@ import { SmoothScrollProvider } from "@/components/shared/SmoothScrollProvider";
 import { NavigationLogo } from "@/components/stranger-things/NavigationLogo";
 import { Footer } from "@/components/stranger-things/Footer";
 import { CustomCursor } from "@/components/stranger-things/CustomCursor";
+import { AudioToggle } from "@/components/shared/AudioToggle";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const cormorant = Cormorant_Garamond({
@@ -40,6 +41,7 @@ export default function RootLayout({
         <SmoothScrollProvider>
           <CustomCursor />
           <NavigationLogo />
+          <AudioToggle />
           {children}
           <Footer />
         </SmoothScrollProvider>

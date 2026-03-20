@@ -10,7 +10,6 @@ import { SectionDivider } from "@/components/shared/SectionDivider";
 export default function Home() {
   return (
     <main className="relative bg-black min-h-screen selection:bg-red-900 selection:text-white">
-      <AudioToggle />
       <Portal />
       <SectionDivider />
       <AboutHacknovate />
