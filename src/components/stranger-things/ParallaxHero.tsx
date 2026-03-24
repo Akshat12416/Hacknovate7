@@ -151,7 +151,7 @@ export function ParallaxHero() {
                         30-Hours International Hybrid Hackathon
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 mt-8 lg:mt-10 items-center md:justify-start">
-                        <CustomButton
+                        {/* <CustomButton
                             link="https://hacknovate07.devfolio.co/"
                             buttonText="Apply with Devfolio"
                             imageSrc="/devfolio.png"
@@ -160,12 +160,12 @@ export function ParallaxHero() {
                             iconSize="34px"
                             gap="-2px"
                             applyInvert={true}
-                        />
+                        /> */}
                         <CustomButton
                             link="https://discord.gg/qxFmdeYCT"
                             buttonText="Join Discord"
                             imageSrc="/discord-logo.svg"
-                            width="180px"
+                            width="250px"
                             height="56px"
                             iconSize="24px"
                             applyInvert={false}

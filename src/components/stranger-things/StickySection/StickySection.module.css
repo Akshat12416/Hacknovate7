@@ -1,0 +1,712 @@
+/* ═══════════════════════════════════════════════════════════════
+   StickySection — 3D Flip Gallery + Parallax Background
+   ═══════════════════════════════════════════════════════════════ */
+
+.sticky {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: visible;
+}
+
+/* ── Parallax Single Background ───────────────────────────────── */
+.bgContainer {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.bgParallax {
+    position: absolute;
+    inset: -10% 0 -220% 0;
+    will-change: transform;
+    /*
+     * PERF FIX #1: Removed filter:blur(2px).
+     * blur() on a parallax element forces the GPU to re-rasterize
+     * the ENTIRE background image on every single scroll frame.
+     * This is the single most expensive operation during a GSAP
+     * scrub on mobile. The dark overlay + vignette already soften
+     * the image enough visually.
+     */
+}
+
+.bgImage {
+    object-fit: cover !important;
+    object-position: center !important;
+}
+
+.bgDarkOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.bgVignette {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.9);
+    background: radial-gradient(
+        ellipse at center,
+        transparent 15%,
+        rgba(0, 0, 0, 0.7) 100%
+    );
+}
+
+/* ── Section Heading ──────────────────────────────────────────── */
+.sectionHeading {
+    position: absolute;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-benguiat), "ITC Benguiat Std", serif;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-weight: 700;
+    color: #ff0000;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: center;
+    text-shadow:
+        0 0 20px rgba(255, 0, 0, 0.6),
+        0 0 40px rgba(255, 0, 0, 0.3),
+        2px 2px 4px rgba(0, 0, 0, 0.8);
+    z-index: 10;
+    margin: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    animation: flicker 3s infinite;
+    opacity: 0;
+}
+
+@keyframes flicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        text-shadow: 0 0 20px rgba(255, 0, 0, 0.6), 0 0 40px rgba(255, 0, 0, 0.3);
+        opacity: 1;
+    }
+    20%, 24%, 55% {
+        text-shadow: none;
+        opacity: 0.7;
+    }
+}
+
+/* ── Columns (desktop) ────────────────────────────────────────── */
+.col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    padding-top: 150px;
+}
+
+/* ── Service Labels ───────────────────────────────────────────── */
+.services {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.service {
+    width: max-content;
+    height: auto;
+    margin-bottom: 10px;
+    opacity: 0;
+}
+
+.service p {
+    text-transform: uppercase;
+    font-family: "ITC Benguiat Std", serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #555;
+    transition: color 0.3s ease;
+    cursor: pointer;
+    line-height: 28px;
+    letter-spacing: 1px;
+}
+
+.service p:hover {
+    color: #fff;
+    text-shadow: 0 0 15px rgba(220, 0, 0, 1), 0 0 40px rgba(220, 0, 0, 0.8);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   3D FLIP IMAGE GALLERY
+   ══════════════════════════════════════════════════════════════ */
+
+.flipGallery {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 1;
+    perspective: 1200px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    opacity: 0;
+    /*
+     * PERF FIX #2: Removed CSS transition:box-shadow.
+     * GSAP owns this via its pulse fromTo(). A CSS transition and
+     * GSAP animating the same property simultaneously causes two
+     * competing interpolations per frame on the compositor thread.
+     */
+}
+
+.flipLayer {
+    position: absolute;
+    inset: 0;
+    /*
+     * PERF FIX #3: Removed transform-style:preserve-3d from layers.
+     * preserve-3d on each child tells the browser to promote every
+     * child element into its own composited 3D layer — including the
+     * invisible ones. With N services you had N stacked GPU textures
+     * all re-composited together on every GSAP scrub tick.
+     * The parent (.flipGallery) having perspective is all that's
+     * needed for rotateX to look 3D — children don't need preserve-3d.
+     */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform, opacity;
+    border-radius: 12px;
+    overflow: hidden;
+    /*
+     * PERF FIX #4: Reduced from 2 layered box-shadows to 1.
+     * Every box-shadow value is painted as a separate blurred copy
+     * of the element. During a GSAP scrub the browser repaints all
+     * shadows on every frame — multiple values multiply that cost.
+     * The red glow (rgba 220,38,38,0.1) was nearly invisible anyway.
+     */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    /*
+     * PERF FIX #5: Removed CSS transition:box-shadow from layers.
+     * Same reason as .flipGallery — competing with GSAP.
+     */
+}
+
+.flipImage {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block;
+    transform: scale(1);
+    /*
+     * Ken Burns zoom — disabled on mobile via @media below.
+     * will-change promotes the image to its own GPU layer so
+     * parent rotateX transforms don't force a pixel re-raster.
+     */
+    transition: transform 8s linear;
+    will-change: transform;
+}
+
+/* Corner accent brackets — desktop hover only */
+.flipLayer::before,
+.flipLayer::after {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    opacity: 0;
+    transition: opacity 0.35s ease, width 0.35s ease, height 0.35s ease;
+    z-index: 6;
+    pointer-events: none;
+}
+.flipLayer::before {
+    top: 8px;
+    left: 8px;
+    border-top:  2px solid rgba(220, 38, 38, 0.65);
+    border-left: 2px solid rgba(220, 38, 38, 0.65);
+}
+.flipLayer::after {
+    bottom: 8px;
+    right: 8px;
+    border-bottom: 2px solid rgba(220, 38, 38, 0.65);
+    border-right:  2px solid rgba(220, 38, 38, 0.65);
+}
+.flipLayer:hover::before,
+.flipLayer:hover::after {
+    opacity: 1;
+    width: 26px;
+    height: 26px;
+}
+
+.imageVignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /*
+     * PERF FIX #6: Replaced inset box-shadow with CSS gradient.
+     * An inset box-shadow on a composited element gets repainted on
+     * every parent transform change (every GSAP scrub tick).
+     * A background gradient is baked into the layer texture once
+     * at paint time and never triggers a repaint.
+     */
+    background: radial-gradient(
+        ellipse at center,
+        transparent 48%,
+        rgba(0, 0, 0, 0.82) 100%
+    );
+    border-radius: 12px;
+    z-index: 5;
+}
+
+/* ── Member Cards ─────────────────────────────────────────────── */
+.membersWrapper {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    min-height: 40px;
+    margin-top: 1rem;
+    opacity: 0;
+}
+
+.memberPanel {
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: opacity 0.45s ease;
+}
+
+.memberGrid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.memberRow {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+}
+
+/* ── Badge ─────────────────────────────────────────────────────── */
+.memberBadge {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+        background   0.28s ease,
+        border-color 0.28s ease,
+        transform    0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow   0.28s ease;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.memberBadge:hover {
+    background: rgba(255, 255, 255, 0.13);
+    border-color: rgba(255, 255, 255, 0.28);
+    transform: scale(1.05) translateY(-2px);
+    box-shadow:
+        inset 0 0 15px rgba(0, 0, 0, 0.7),
+        0 6px 18px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+
+.memberBadge:active {
+    transform: scale(0.97) translateY(0);
+    transition-duration: 0.1s;
+}
+
+/* Shimmer sweep */
+.memberBadge::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        105deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.09) 50%,
+        transparent 70%
+    );
+    transform: translateX(-120%);
+    transition: none;
+    pointer-events: none;
+}
+.memberBadge:hover::before {
+    transform: translateX(120%);
+    transition: transform 0.5s ease;
+}
+
+/* Ripple on click */
+.memberBadge::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    background: radial-gradient(
+        circle at var(--ripple-x, 50%) var(--ripple-y, 50%),
+        rgba(255, 255, 255, 0.18) 0%,
+        transparent 65%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+}
+.memberBadge:active::after {
+    opacity: 1;
+    transition-duration: 0.05s;
+}
+
+.memberName {
+    font-family: "ITC Benguiat Std", serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    transition: letter-spacing 0.25s ease;
+}
+
+.memberBadge:hover .memberName {
+    letter-spacing: 0.85px;
+}
+
+.memberIcon {
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    transition:
+        color     0.28s ease,
+        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    width: 14px;
+    height: 14px;
+}
+
+.memberBadge:hover .memberIcon {
+    color: #0a66c2;
+    transform: rotate(-8deg) scale(1.15);
+}
+
+/* ── Progress Bar ─────────────────────────────────────────────── */
+.progressBar {
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2.5px;
+    height: 55%;
+    background-color: rgba(213, 213, 213, 0.2);
+    pointer-events: none;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #ff3333, #cc0000);
+    box-shadow: 0 0 8px rgba(220, 38, 38, 0.75);
+    transform-origin: top;
+    transform: scaleY(0);
+    will-change: transform;
+    border-radius: 2px;
+}
+
+.progress::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff4444;
+    box-shadow:
+        0 0 6px 2px rgba(255, 68, 68, 0.8),
+        0 0 14px 4px rgba(220, 38, 38, 0.45);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TABLET & MOBILE — ≤ 1024px
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+
+    .sticky {
+        flex-direction: column;
+        overflow: visible;
+    }
+
+    .sectionHeading {
+        position: absolute;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: normal;
+        width: 88%;
+        font-size: clamp(1.3rem, 5.2vw, 2.6rem);
+        line-height: 1.2;
+        letter-spacing: 0.07em;
+        text-align: center;
+        z-index: 20;
+    }
+
+    .col:nth-child(2) {
+        display: none;
+    }
+
+    .col:nth-child(3) {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-top: 144px;
+        padding-bottom: 20px;
+        padding-left: 16px;
+        padding-right: 16px;
+        gap: 14px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .flipGallery {
+        width: min(75vw, 400px);
+        max-width: min(75vw, 400px);
+        margin-bottom: 20px;
+        /*
+         * PERF FIX #7: Tighter perspective on tablet.
+         * Less depth = less compositor precision needed per frame.
+         */
+        perspective: 800px;
+    }
+
+    /*
+     * PERF FIX #8: Kill Ken Burns on all touch-screen sizes.
+     * A CSS scale transition running alongside GSAP's rotateX
+     * forces the browser to keep both the image AND its parent
+     * as separate GPU textures and blend them every frame.
+     * Disabling it halves the compositor workload for the gallery.
+     */
+    .flipImage {
+        transition: none;
+        will-change: auto;
+    }
+
+    /*
+     * PERF FIX #9: Remove corner bracket pseudo-elements on mobile.
+     * ::before/::after with CSS transitions = 2 extra compositor
+     * layers per .flipLayer. On a page with many service images
+     * that multiplies fast. They're purely hover decoration —
+     * pointless on touch devices.
+     */
+    .flipLayer::before,
+    .flipLayer::after {
+        display: none;
+    }
+
+    .membersWrapper {
+        width: 100%;
+        max-width: 90vw;
+        flex-shrink: 1;
+        margin-top: 6px;
+        position: relative;
+    }
+
+    .memberPanel {
+        width: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .memberRow {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .memberGrid {
+        gap: 6px;
+        max-height: 35vh;
+        overflow: hidden;
+    }
+
+    .progressBar {
+        display: none;
+    }
+}
+
+/* ── iPad portrait & similar tall tablets (601–900px wide) ────── */
+@media (min-width: 601px) and (max-width: 900px) and (orientation: portrait) {
+
+    .sectionHeading {
+        top: 102px;
+        font-size: clamp(1.4rem, 4.8vw, 2rem);
+        width: 86%;
+        letter-spacing: 0.06em;
+    }
+
+    .col:nth-child(3) {
+        padding-top: 130px;
+        padding-bottom: 24px;
+        gap: 12px;
+    }
+
+    .flipGallery {
+        width: min(65vw, 340px);
+        max-width: min(65vw, 340px);
+    }
+
+    .membersWrapper {
+        max-width: 86vw;
+        margin-top: 4px;
+    }
+
+    .memberGrid {
+        gap: 5px;
+        max-height: 28vh;
+    }
+
+    .memberRow {
+        gap: 5px;
+    }
+
+    .memberBadge {
+        padding: 4px 10px;
+    }
+
+    .memberName {
+        font-size: 10.5px;
+    }
+
+    .memberIcon {
+        width: 13px;
+        height: 13px;
+    }
+}
+
+/* ── Phones (≤ 600px) ── */
+@media (max-width: 600px) {
+
+    .sectionHeading {
+        top: 6em;
+        font-size: clamp(1rem, 4.8vw, 1.5rem);
+        width: 84%;
+        letter-spacing: 0.04em;
+    }
+
+    .col:nth-child(3) {
+        padding-top: 126px;
+        padding-bottom: 16px;
+        gap: 10px;
+    }
+
+    .flipGallery {
+        width: clamp(220px, 80vw, 320px);
+        max-width: clamp(220px, 50vh, 320px);
+        /*
+         * PERF FIX #10: No base box-shadow on the gallery wrapper for phones.
+         * The GSAP pulse adds/removes it dynamically — keeping any permanent
+         * shadow means the browser holds a blurred copy of the element in
+         * GPU memory at all times on low-RAM devices.
+         */
+        box-shadow: none;
+    }
+
+    /*
+     * PERF FIX #11: Strip badge pseudo-elements on phones.
+     * Shimmer (::before) and ripple (::after) are hover/click effects
+     * that never fire on touch. Hiding them removes their compositor
+     * layers entirely.
+     */
+    .memberBadge::before,
+    .memberBadge::after {
+        display: none;
+    }
+
+    /* No hover transform on touch — avoids stuck :hover states on iOS */
+    .memberBadge:hover {
+        transform: none;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .memberGrid {
+        max-height: 32vh;
+    }
+
+    .memberBadge {
+        padding: 3px 9px;
+    }
+
+    .memberName {
+        font-size: 10px;
+    }
+
+    .memberIcon {
+        width: 12px;
+        height: 12px;
+        /* No icon spin animation needed on touch */
+        transition: none;
+    }
+}
+
+/* ── Very small phones (≤ 380px) ── */
+@media (max-width: 380px) {
+
+    .sectionHeading {
+        top: 6em;
+        font-size: clamp(0.9rem, 4.5vw, 1.2rem);
+        width: 82%;
+    }
+
+    .col:nth-child(3) {
+        padding-top: 112px;
+        gap: 8px;
+    }
+
+    .flipGallery {
+        width: clamp(160px, 70vw, 240px);
+        max-width: clamp(160px, 42vh, 240px);
+        /*
+         * PERF FIX #12: Even tighter perspective on very small phones.
+         * 600px perspective still renders a convincing flip while
+         * minimising depth-buffer precision requirements.
+         */
+        perspective: 600px;
+    }
+
+    .memberGrid {
+        max-height: 30vh;
+    }
+}
+
+/* ── Reduced motion ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .memberBadge,
+    .memberBadge::before,
+    .flipLayer::before,
+    .flipLayer::after,
+    .flipImage,
+    .memberIcon,
+    .memberName {
+        transition: none !important;
+        animation:  none !important;
+    }
+
+    .sectionHeading {
+        animation: none !important;
+        opacity: 1 !important;
+    }
+}
