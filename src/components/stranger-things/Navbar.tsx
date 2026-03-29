@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface NavbarProps {
     isMenuOpen: boolean;
@@ -16,6 +17,7 @@ const NAV_LINKS = [
     { label: "Team", href: "/teams" },
     { label: "Events", href: "/events" },
     { label: "Schedule", href: "/schedule" },
+    { label: "Sponsors", href: "/sponsors" },
     { label: "Contact Us", href: "/contactus" },
 ];
 
@@ -28,6 +30,7 @@ export function Navbar({
     alwaysVisible = false,
     portalThreshold = 3000,
 }: NavbarProps) {
+    const pathname = usePathname();
     const navContainerRef = useRef<HTMLDivElement>(null);
     const mobileNavRef    = useRef<HTMLDivElement>(null);
     const mobileMenuRef   = useRef<HTMLDivElement>(null);
@@ -297,21 +300,29 @@ export function Navbar({
                     style={{ willChange: "transform, opacity" }}
                 >
                     <nav className="flex gap-8 lg:gap-12" style={{ fontFamily: "'ITC Benguiat Std', serif" }}>
-                        {NAV_LINKS.map((link) => (
-                            <Link
-                                key={link.label}
-                                href={link.href}
-                                className="text-white hover:text-red-500 text-lg lg:text-xl"
-                                style={{
-                                    display: "inline-block",
-                                    transition: "color 0.2s ease, transform 0.2s ease",
-                                }}
-                                onMouseEnter={e => gsap.to(e.currentTarget, { scale: 1.1, duration: 0.2, ease: "power2.out" })}
-                                onMouseLeave={e => gsap.to(e.currentTarget, { scale: 1.0, duration: 0.2, ease: "power2.out" })}
-                            >
-                                {link.label}
-                            </Link>
-                        ))}
+                        {NAV_LINKS.map((link) => {
+                            const isActive = pathname === link.href;
+                            return (
+                                <Link
+                                    key={link.label}
+                                    href={link.href}
+                                    className="text-lg lg:text-xl"
+                                    style={{
+                                        display: "inline-block",
+                                        transition: "color 0.2s ease, transform 0.2s ease, text-shadow 0.2s ease",
+                                        color: isActive ? "#ef4444" : "white",
+                                        textShadow: isActive ? "0 0 18px rgba(239,68,68,0.7)" : "none",
+                                    }}
+                                    onMouseEnter={e => gsap.to(e.currentTarget, { scale: 1.1, duration: 0.2, ease: "power2.out" })}
+                                    onMouseLeave={e => gsap.to(e.currentTarget, { scale: 1.0, duration: 0.2, ease: "power2.out" })}
+                                >
+                                    {link.label}
+                                    {isActive && (
+                                        <span className="block h-0.5 mt-0.5 rounded-full" style={{ background: "linear-gradient(90deg, #ef4444, #991b1b)" }} />
+                                    )}
+                                </Link>
+                            );
+                        })}
                     </nav>
                 </div>
             </div>
@@ -351,17 +362,24 @@ export function Navbar({
                             className="flex flex-col items-start px-8 pt-24 pb-10 gap-6"
                             style={{ fontFamily: "'ITC Benguiat Std', serif" }}
                         >
-                            {NAV_LINKS.map((link) => (
-                                <Link
-                                    key={link.label}
-                                    href={link.href}
-                                    onClick={handleMenuToggle}
-                                    className="menu-item text-white hover:text-red-500 text-2xl opacity-0"
-                                    style={{ transition: "color 0.2s ease" }}
-                                >
-                                    {link.label}
-                                </Link>
-                            ))}
+                            {NAV_LINKS.map((link) => {
+                                const isActive = pathname === link.href;
+                                return (
+                                    <Link
+                                        key={link.label}
+                                        href={link.href}
+                                        onClick={handleMenuToggle}
+                                        className="menu-item text-2xl opacity-0"
+                                        style={{
+                                            transition: "color 0.2s ease",
+                                            color: isActive ? "#ef4444" : "white",
+                                            textShadow: isActive ? "0 0 18px rgba(239,68,68,0.7)" : "none",
+                                        }}
+                                    >
+                                        {link.label}
+                                    </Link>
+                                );
+                            })}
                         </nav>
                     </div>
                 )}

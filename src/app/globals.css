@@ -262,3 +262,73 @@ html.lenis {
     display: none;
   }
 }
+
+/* ═══════════════════════════════════════════════
+   SPONSORS PAGE
+═══════════════════════════════════════════════ */
+
+/* ── Hero Gradient Title — crimson/red matching home page ── */
+.sponsors-title-gradient {
+  background: linear-gradient(135deg, #fca5a5 0%, #ef4444 30%, #dc2626 60%, #fca5a5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleShimmer 5s ease-in-out infinite alternate;
+  background-size: 200% 200%;
+}
+
+@keyframes titleShimmer {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* ── Ambient orb float ── */
+@keyframes sponsorOrbFloat {
+  0%   { transform: translate(-50%, 0) scale(1); }
+  100% { transform: translate(-50%, -30px) scale(1.06); }
+}
+
+/* ── Sponsor Section: scroll-triggered fade-in + slide-up ── */
+.sponsor-section {
+  position: relative;
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sponsor-section.sponsor-section-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Sponsor Card: float + subtle hover scale ── */
+.sponsor-card {
+  cursor: pointer;
+  animation: sponsorFloat 4.5s ease-in-out infinite;
+}
+
+.sponsor-card:hover {
+  transform: scale(1.05) !important;
+}
+
+.sponsor-card:hover .sponsor-logo {
+  filter: brightness(1.1) contrast(1.1) drop-shadow(0 0 15px rgba(220, 38, 38, 0.5)) !important;
+}
+
+/* Stagger float delay */
+.sponsor-card:nth-child(2n)   { animation-delay: -1.2s; }
+.sponsor-card:nth-child(3n)   { animation-delay: -2.5s; }
+.sponsor-card:nth-child(4n)   { animation-delay: -0.6s; }
+.sponsor-card:nth-child(5n)   { animation-delay: -1.9s; }
+
+@keyframes sponsorFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* ── Responsive overrides ── */
+@media (max-width: 640px) {
+  .sponsor-card:hover {
+    transform: scale(1.03) !important;
+  }
+}
