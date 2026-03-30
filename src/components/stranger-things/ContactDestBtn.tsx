@@ -8,8 +8,8 @@ type TransportMode = "WALK" | "TRAIN" | "BUS" | "AIR";
 const MODE_ICONS: Record<TransportMode, string> = {
   WALK: "⟶",
   TRAIN: "⟶",
-  BUS:   "⟶",
-  AIR:   "⟶",
+  BUS: "⟶",
+  AIR: "⟶",
 };
 
 // Tiny crack paths per button (viewBox 0 0 100 32)
@@ -27,12 +27,12 @@ interface FireButtonProps {
 }
 
 function FireModeButton({ label, active, onClick }: FireButtonProps) {
-  const btnRef    = useRef<HTMLButtonElement>(null);
-  const glowRef   = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
   const borderRef = useRef<HTMLDivElement>(null);
-  const coreRefs  = useRef<(SVGPathElement | null)[]>([]);
+  const coreRefs = useRef<(SVGPathElement | null)[]>([]);
   const bloomRefs = useRef<(SVGPathElement | null)[]>([]);
-  const ctxRef    = useRef<gsap.Context | null>(null);
+  const ctxRef = useRef<gsap.Context | null>(null);
 
   // Re-run animation when active state changes
   useEffect(() => {
@@ -61,17 +61,17 @@ function FireModeButton({ label, active, onClick }: FireButtonProps) {
 
         // Animate cracks only when active
         BTN_CRACKS.forEach((_, i) => {
-          const core  = coreRefs.current[i];
+          const core = coreRefs.current[i];
           const bloom = bloomRefs.current[i];
           if (!core) return;
 
           const len = core.getTotalLength?.() ?? 15;
-          gsap.set(core,  { strokeDasharray: len, strokeDashoffset: len, opacity: 0 });
+          gsap.set(core, { strokeDasharray: len, strokeDashoffset: len, opacity: 0 });
           if (bloom) gsap.set(bloom, { strokeDasharray: len, strokeDashoffset: len, opacity: 0 });
 
           const run = () => {
-            const drawDur  = gsap.utils.random(0.15, 0.35) as number;
-            const coreMax  = gsap.utils.random(0.3, 0.5)   as number;
+            const drawDur = gsap.utils.random(0.15, 0.35) as number;
+            const coreMax = gsap.utils.random(0.3, 0.5) as number;
 
             const tl = gsap.timeline({
               onComplete: () => {
@@ -86,12 +86,12 @@ function FireModeButton({ label, active, onClick }: FireButtonProps) {
             for (let p = 0; p < pulses; p++) {
               const fo = gsap.utils.random(0.05, 0.45) as number;
               const fd = gsap.utils.random(0.05, 0.15) as number;
-              tl.to(core,  { opacity: fo,        duration: fd, ease: "none" });
+              tl.to(core, { opacity: fo, duration: fd, ease: "none" });
               if (bloom) tl.to(bloom, { opacity: fo * 0.4, duration: fd, ease: "none" }, "<");
             }
 
             const fadeDur = gsap.utils.random(0.2, 0.5) as number;
-            tl.to(core,  { opacity: 0, strokeDashoffset: len, duration: fadeDur, ease: "power2.in" });
+            tl.to(core, { opacity: 0, strokeDashoffset: len, duration: fadeDur, ease: "power2.in" });
             if (bloom) tl.to(bloom, { opacity: 0, strokeDashoffset: len, duration: fadeDur, ease: "power2.in" }, "<");
           };
 
@@ -100,10 +100,10 @@ function FireModeButton({ label, active, onClick }: FireButtonProps) {
 
       } else {
         // Inactive: dim everything
-        gsap.set(glowRef.current,  { opacity: 0 });
+        gsap.set(glowRef.current, { opacity: 0 });
         gsap.set(borderRef.current, { opacity: 0.15 });
-        coreRefs.current.forEach(c  => c  && gsap.set(c,  { opacity: 0 }));
-        bloomRefs.current.forEach(b => b  && gsap.set(b,  { opacity: 0 }));
+        coreRefs.current.forEach(c => c && gsap.set(c, { opacity: 0 }));
+        bloomRefs.current.forEach(b => b && gsap.set(b, { opacity: 0 }));
       }
 
     }, btnRef);
@@ -114,15 +114,15 @@ function FireModeButton({ label, active, onClick }: FireButtonProps) {
   const onEnter = () => {
     if (active) return;
     gsap.to(borderRef.current, { opacity: 0.45, duration: 0.25, ease: "power2.out" });
-    gsap.to(glowRef.current,   { opacity: 0.25, duration: 0.25, ease: "power2.out" });
+    gsap.to(glowRef.current, { opacity: 0.25, duration: 0.25, ease: "power2.out" });
   };
   const onLeave = () => {
     if (active) return;
     gsap.to(borderRef.current, { opacity: 0.15, duration: 0.3, ease: "power2.out" });
-    gsap.to(glowRef.current,   { opacity: 0,    duration: 0.3, ease: "power2.out" });
+    gsap.to(glowRef.current, { opacity: 0, duration: 0.3, ease: "power2.out" });
   };
-  const onDown = () => gsap.to(btnRef.current, { scale: 0.94, duration: 0.1, ease: "power2.in",         overwrite: true });
-  const onUp   = () => gsap.to(btnRef.current, { scale: 1,    duration: 0.3, ease: "elastic.out(1,0.5)", overwrite: true });
+  const onDown = () => gsap.to(btnRef.current, { scale: 0.94, duration: 0.1, ease: "power2.in", overwrite: true });
+  const onUp = () => gsap.to(btnRef.current, { scale: 1, duration: 0.3, ease: "elastic.out(1,0.5)", overwrite: true });
 
   return (
     <button
@@ -144,10 +144,10 @@ function FireModeButton({ label, active, onClick }: FireButtonProps) {
         letterSpacing: "3px",
         textTransform: "uppercase",
         fontFamily: "'Cinzel', serif",
-        color: active ? "#ffd5a8" : "#4a4035",
+        color: active ? "#ffe4c7" : "#f5f5f5",
         background: active
-          ? "linear-gradient(180deg, #180000 0%, #2c0000 50%, #180000 100%)"
-          : "linear-gradient(180deg, #0a0a0a 0%, #111 50%, #0a0a0a 100%)",
+          ? "linear-gradient(180deg, #3a0d0d 0%, #5c1a1a 50%, #3a0d0d 100%)"
+          : "linear-gradient(180deg, #1a1a1a 0%, #222 50%, #1a1a1a 100%)",
         border: "none",
         borderRadius: "4px",
         outline: "none",

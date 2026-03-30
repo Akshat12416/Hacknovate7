@@ -131,7 +131,7 @@ export default function ContactSection() {
   return (
     <main
       className={`${trackFont.variable} relative w-full overflow-x-hidden`}
-      style={{ backgroundColor: "#050000", fontFamily: "var(--font-track), serif", minHeight: "100svh" }}
+      style={{ backgroundColor: "#000000", fontFamily: "var(--font-track), serif", minHeight: "100svh" }}
     >
       
       {/* Navbar */}
@@ -167,24 +167,34 @@ export default function ContactSection() {
           </div>
         </div>
 
-        {/* Overlays */}
-        <div className="absolute inset-0 z-[1] pointer-events-none"
-          style={{ background: "radial-gradient(ellipse 110% 80% at 50% 115%, rgba(150,0,12,0.65) 0%, rgba(70,0,5,0.3) 45%, transparent 68%)" }} />
-        <div className="absolute top-0 inset-x-0 h-28 z-[1] pointer-events-none"
-          style={{ background: "linear-gradient(180deg, rgba(5,0,0,0.9) 0%, transparent 100%)" }} />
-        <div className="absolute bottom-0 inset-x-0 h-20 z-[1] pointer-events-none"
-          style={{ background: "linear-gradient(0deg, rgba(5,0,0,0.6) 0%, transparent 100%)" }} />
-        <div className="absolute inset-0 z-[1] pointer-events-none"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-            backgroundSize: "200px 200px",
-            opacity: 0.055,
-          }} />
+        {/* ═══ NEW VINTAGE OVERLAYS ═══ */}
+        {/* 1. Global dark tint to push background back */}
+        <div className="absolute inset-0 z-[1] bg-black/10 pointer-events-none" />
 
-        {/* ═══ CONTENT WRAPPER ═══
-            < lg  : single column, scrollable, top-padded for navbar
-            >= lg : two-column grid, vertically centered
-        */}
+        {/* 2. Heavy Vintage Vignette (Black edges) */}
+        <div className="absolute inset-0 z-[1] pointer-events-none"
+          style={{ background: "radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.85) 90%, #000 100%)" }} />
+
+        {/* 3. Original Red Underglow (Slightly adjusted for contrast) */}
+        <div className="absolute inset-0 z-[1] pointer-events-none"
+          style={{ background: "radial-gradient(ellipse 110% 80% at 50% 115%, rgba(150,0,12,0.55) 0%, rgba(70,0,5,0.2) 45%, transparent 68%)", mixBlendMode: "multiply" }} />
+        
+        {/* Top/Bottom shadow gradients */}
+        <div className="absolute top-0 inset-x-0 h-32 z-[1] pointer-events-none"
+          style={{ background: "linear-gradient(180deg, rgba(0,0,0,0.95) 0%, transparent 100%)" }} />
+        <div className="absolute bottom-0 inset-x-0 h-24 z-[1] pointer-events-none"
+          style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.8) 0%, transparent 100%)" }} />
+
+        {/* 4. Enhanced Film Grain/Noise */}
+        <div className="absolute inset-0 z-[1] pointer-events-none mix-blend-overlay"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+            backgroundSize: "200px 200px",
+            opacity: 0.15, 
+          }} />
+        {/* ════════════════════════════ */}
+
+        {/* ═══ CONTENT WRAPPER ═══ */}
         <div
           className="
             relative z-10 w-full max-w-5xl xl:max-w-6xl mx-auto
@@ -205,7 +215,7 @@ export default function ContactSection() {
             {/* Eyebrow */}
             <p
               className="text-[8px] sm:text-[9px] tracking-[0.42em] uppercase font-mono"
-              style={{ color: "rgba(255,80,20,0.6)", textShadow: "0 0 8px rgba(255,60,0,0.35)" }}
+              style={{ color: "rgba(255,80,20,0.8)", textShadow: "0 0 8px rgba(255,60,0,0.6)" }}
             >
               Hacknovate 7.0 · Gateway
             </p>
@@ -214,13 +224,13 @@ export default function ContactSection() {
             <div className="space-y-0.5">
               <h2
                 className="text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-4xl font-bold uppercase tracking-tight leading-none"
-                style={{ color: "#fff", textShadow: "0 0 36px rgba(255,55,0,0.28), 0 2px 3px rgba(0,0,0,0.95)" }}
+                style={{ color: "#fff", textShadow: "0 0 36px rgba(255,55,0,0.5), 0 2px 5px rgba(0,0,0,1)" }}
               >
                 ABESIT GROUP
               </h2>
               <h2
                 className="text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl font-bold uppercase tracking-widest leading-snug"
-                style={{ color: "#ff3b00", textShadow: "0 0 18px rgba(255,59,0,0.9), 0 0 40px rgba(255,59,0,0.28)" }}
+                style={{ color: "#ff3b00", textShadow: "0 0 18px rgba(255,59,0,1), 0 0 40px rgba(255,59,0,0.4)" }}
               >
                 OF INSTITUTIONS
               </h2>
@@ -229,7 +239,7 @@ export default function ContactSection() {
             {/* Location */}
             <p
               className="text-[8px] sm:text-[9px] tracking-[0.25em] uppercase font-mono"
-              style={{ color: "rgba(210,130,90,0.5)", fontStyle: "italic" }}
+              style={{ color: "rgba(210,130,90,0.7)", fontStyle: "italic" }}
             >
               Ghaziabad • Uttar Pradesh • India
             </p>
@@ -249,20 +259,20 @@ export default function ContactSection() {
             <div
               className=" w-[70%] sm:w-[60%] lg:w-full rounded-sm px-3 py-2.5 text-center lg:text-center"
               style={{
-                borderLeft: "2px solid rgba(255,59,0,0.5)",
-                backgroundColor: "rgba(255,25,0,0.055)",
+                borderLeft: "2px solid rgba(255,59,0,0.7)",
+                backgroundColor: "rgba(20,2,0,0.4)",
                 backdropFilter: "blur(6px)",
               }}
             >
               <span
                 className="text-[7px] sm:text-[8px] uppercase tracking-widest font-mono font-bold block mb-1"
-                style={{ color: "#ff3b00", textShadow: "0 0 5px rgba(255,59,0,0.55)" }}
+                style={{ color: "#ff3b00", textShadow: "0 0 5px rgba(255,59,0,0.8)" }}
               >
                 ▸ Route Intel
               </span>
               <p
                 className="text-[11px] sm:text-xs md:text-sm leading-snug"
-                style={{ color: "rgba(255,215,195,0.88)", fontFamily: "Georgia, serif", fontStyle: "italic" }}
+                style={{ color: "rgba(255,215,195,0.9)", fontFamily: "Georgia, serif", fontStyle: "italic" }}
               >
                 {transportInfo[selectedMode]}
               </p>
@@ -272,20 +282,20 @@ export default function ContactSection() {
             <div
               className="w-[70%] sm:w-[60%] lg:w-full rounded-sm px-3 py-2.5"
               style={{
-                border: "1px solid rgba(255,59,0,0.12)",
-                backgroundColor: "rgba(140,10,0,0.07)",
+                border: "1px solid rgba(255,59,0,0.2)",
+                backgroundColor: "rgba(20,2,0,0.4)",
                 backdropFilter: "blur(8px)",
               }}
             >
               <p
                 className="text-[7px] sm:text-[8px] uppercase tracking-[0.26em] font-mono mb-1"
-                style={{ color: "rgba(255,100,50,0.42)" }}
+                style={{ color: "rgba(255,100,50,0.6)" }}
               >
                 The Gateway Location
               </p>
               <p
                 className="text-[11px] sm:text-xs leading-relaxed text-center lg:text-left"
-                style={{ color: "rgba(255,200,180,0.78)", fontFamily: "Georgia, serif" }}
+                style={{ color: "rgba(255,200,180,0.9)", fontFamily: "Georgia, serif" }}
               >
                 ABESIT Campus Road, NE 3, Near Crossing Republic,<br />
                 Ghaziabad, Uttar Pradesh 201009
@@ -294,8 +304,6 @@ export default function ContactSection() {
           </div>
 
           {/* ── RIGHT — Form card ── */}
-          {/* On mobile/tablet: full-width centered card below the info block
-              On lg+: occupies right column, no forced max-width */}
           <div
             ref={formRef}
             className="relative w-[70%] sm:w-[60%] lg:w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-none mx-auto flex-shrink-0 mb-4 lg:mb-0"
@@ -304,7 +312,7 @@ export default function ContactSection() {
             <div
               className="absolute -inset-3 rounded-2xl pointer-events-none"
               style={{
-                background: "radial-gradient(ellipse at center, rgba(255,59,0,0.15) 0%, transparent 65%)",
+                background: "radial-gradient(ellipse at center, rgba(255,59,0,0.2) 0%, transparent 65%)",
                 filter: "blur(18px)",
               }}
             />
@@ -312,25 +320,25 @@ export default function ContactSection() {
             <div
               className="absolute top-0 left-8 right-8 h-px pointer-events-none"
               style={{
-                background: "linear-gradient(90deg, transparent, #ff3b00, rgba(255,100,50,0.45), transparent)",
-                boxShadow: "0 0 8px rgba(255,59,0,0.65)",
+                background: "linear-gradient(90deg, transparent, #ff3b00, rgba(255,100,50,0.6), transparent)",
+                boxShadow: "0 0 8px rgba(255,59,0,0.8)",
               }}
             />
 
             <div
               className="relative rounded-xl overflow-hidden px-5 sm:px-7 md:px-8 py-5 sm:py-6 md:py-8 flex flex-col items-center gap-3 sm:gap-4"
               style={{
-                backgroundColor: "rgba(10,1,0,0.8)",
+                backgroundColor: "rgba(5,0,0,0.85)", // Darkened card slightly
                 backdropFilter: "blur(22px)",
-                border: "1px solid rgba(255,59,0,0.1)",
-                boxShadow: "0 0 50px rgba(0,0,0,0.8), inset 0 0 28px rgba(150,12,0,0.04)",
+                border: "1px solid rgba(255,59,0,0.15)",
+                boxShadow: "0 0 50px rgba(0,0,0,0.95), inset 0 0 28px rgba(150,12,0,0.08)",
               }}
             >
               {/* Top bloom */}
               <div
                 className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-14 pointer-events-none"
                 style={{
-                  background: "radial-gradient(ellipse at 50% 0%, rgba(255,59,0,0.25) 0%, transparent 70%)",
+                  background: "radial-gradient(ellipse at 50% 0%, rgba(255,59,0,0.3) 0%, transparent 70%)",
                   filter: "blur(5px)",
                 }}
               />
@@ -339,18 +347,18 @@ export default function ContactSection() {
               <div className="text-center relative z-10">
                 <p
                   className="text-[7px] sm:text-[8px] font-mono tracking-[0.38em] uppercase mb-1"
-                  style={{ color: "rgba(255,95,45,0.42)" }}
+                  style={{ color: "rgba(255,95,45,0.6)" }}
                 >
                   Hawkins Lab — Comm Channel
                 </p>
                 <h3
                   className="text-sm sm:text-base md:text-lg lg:text-xl font-bold uppercase tracking-[0.16em]"
-                  style={{ color: "rgba(255,255,255,0.92)", textShadow: "0 0 14px rgba(255,59,0,0.22)" }}
+                  style={{ color: "rgba(255,255,255,1)", textShadow: "0 0 14px rgba(255,59,0,0.4)" }}
                 >
                   BECOME A{" "}
                   <span style={{
                     color: "#ff3b00",
-                    textShadow: "0 0 14px rgba(255,59,0,1), 0 0 30px rgba(255,59,0,0.32)",
+                    textShadow: "0 0 14px rgba(255,59,0,1), 0 0 30px rgba(255,59,0,0.5)",
                   }}>
                     SPONSOR
                   </span>
@@ -360,7 +368,7 @@ export default function ContactSection() {
               {/* Divider */}
               <div
                 className="w-full h-px"
-                style={{ background: "linear-gradient(90deg, transparent, rgba(255,59,0,0.35), transparent)", boxShadow: "0 0 4px rgba(255,59,0,0.2)" }}
+                style={{ background: "linear-gradient(90deg, transparent, rgba(255,59,0,0.5), transparent)", boxShadow: "0 0 4px rgba(255,59,0,0.4)" }}
               />
 
               {/* Stats */}
@@ -373,17 +381,17 @@ export default function ContactSection() {
                   <div
                     key={s.label}
                     className="py-2 rounded-sm"
-                    style={{ backgroundColor: "rgba(255,30,0,0.07)", border: "1px solid rgba(255,59,0,0.1)" }}
+                    style={{ backgroundColor: "rgba(255,30,0,0.1)", border: "1px solid rgba(255,59,0,0.15)" }}
                   >
                     <p
                       className="text-sm sm:text-base font-bold"
-                      style={{ color: "#ff3b00", textShadow: "0 0 9px rgba(255,59,0,0.7)" }}
+                      style={{ color: "#ff3b00", textShadow: "0 0 9px rgba(255,59,0,0.9)" }}
                     >
                       {s.val}
                     </p>
                     <p
                       className="text-[7px] sm:text-[8px] uppercase tracking-widest font-mono"
-                      style={{ color: "rgba(255,170,140,0.48)" }}
+                      style={{ color: "rgba(255,170,140,0.7)" }}
                     >
                       {s.label}
                     </p>
@@ -394,7 +402,7 @@ export default function ContactSection() {
               {/* Divider */}
               <div
                 className="w-full h-px"
-                style={{ background: "linear-gradient(90deg, transparent, rgba(255,59,0,0.22), transparent)" }}
+                style={{ background: "linear-gradient(90deg, transparent, rgba(255,59,0,0.3), transparent)" }}
               />
 
               {/* CTA */}
@@ -409,8 +417,8 @@ export default function ContactSection() {
               {/* Corner brackets */}
               {(["bottom-0 left-0", "bottom-0 right-0"] as const).map((pos, i) => (
                 <div key={i} className={`absolute ${pos} w-4 h-4 pointer-events-none`}>
-                  <div className="absolute w-full h-px bottom-0" style={{ backgroundColor: "rgba(255,59,0,0.35)" }} />
-                  <div className="absolute h-full w-px" style={{ [i === 0 ? "left" : "right"]: 0, backgroundColor: "rgba(255,59,0,0.35)" }} />
+                  <div className="absolute w-full h-px bottom-0" style={{ backgroundColor: "rgba(255,59,0,0.5)" }} />
+                  <div className="absolute h-full w-px" style={{ [i === 0 ? "left" : "right"]: 0, backgroundColor: "rgba(255,59,0,0.5)" }} />
                 </div>
               ))}
             </div>

@@ -3,12 +3,7 @@
 import { useState } from "react";
 import { Navbar } from "@/components/stranger-things/Navbar";
 import { SPONSOR_CATEGORIES } from "@/data/sponsors";
-import { SponsorSection } from "@/components/sponsors/SponsorSection";
-import type { Metadata } from "next";
-
-// Note: Metadata cannot be exported from a client component.
-// I'll move it to a separate layout or just skip it for now if it's already in the parent.
-// Or I can use a wrapper. But since this is a page, I'll just remove it to avoid errors.
+import { CommunityPartners, SponsorSection } from "@/components/sponsors/SponsorSection";
 
 export default function SponsorsPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -95,6 +90,7 @@ export default function SponsorsPage() {
         {SPONSOR_CATEGORIES.map((category, idx) => (
           <SponsorSection key={category.title} category={category} index={idx} />
         ))}
+        <CommunityPartners/>
       </section>
 
       {/* ── Bottom fade ── */}

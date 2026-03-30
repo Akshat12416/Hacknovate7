@@ -1,5 +1,4 @@
 "use client";
-
 import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
@@ -233,13 +232,6 @@ export default function StickySection() {
     const count = SERVICES.length;
 
     return (
-        /*
-         * SCROLL WRAPPER
-         * ──────────────
-         * This div provides the total scrollable height for ScrollTrigger.
-         * The inner <section> gets pinned inside it while the user scrolls
-         * through (count - 1) × SCROLL_PER pixels, advancing one image per step.
-         */
         <div
             ref={wrapperRef}
             style={{

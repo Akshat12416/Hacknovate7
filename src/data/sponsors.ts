@@ -63,13 +63,13 @@ export const SPONSOR_CATEGORIES: SponsorCategory[] = [
       { name: "DEVFOLIO", logo: "/assets/sponsors/devfolio.png", alt: "Devfolio - Platform Partner" },
     ],
   },
-  {
-    title: "Beverage Partner",
-    tier: "beverage",
-    sponsors: [
-      { name: "FRUITCHILL", logo: "/assets/sponsors/fruitchill.png", alt: "Fruitchill - Beverage Partner" },
-    ],
-  },
+  // {
+  //   title: "Beverage Partner",
+  //   tier: "beverage",
+  //   sponsors: [
+  //     { name: "FRUITCHILL", logo: "/assets/sponsors/fruitchill.png", alt: "Fruitchill - Beverage Partner" },
+  //   ],
+  // },
   {
     title: "General Sponsor",
     tier: "general",

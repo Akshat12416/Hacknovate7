@@ -601,14 +601,14 @@
 @media (max-width: 600px) {
 
     .sectionHeading {
-        top: 6em;
+        top: 156px;
         font-size: clamp(1rem, 4.8vw, 1.5rem);
         width: 84%;
         letter-spacing: 0.04em;
     }
 
     .col:nth-child(3) {
-        padding-top: 126px;
+        padding-top: 180px;
         padding-bottom: 16px;
         gap: 10px;
     }
@@ -666,13 +666,13 @@
 @media (max-width: 380px) {
 
     .sectionHeading {
-        top: 6em;
+        top: 140px;
         font-size: clamp(0.9rem, 4.5vw, 1.2rem);
         width: 82%;
     }
 
     .col:nth-child(3) {
-        padding-top: 112px;
+        padding-top: 168px;
         gap: 8px;
     }
 
