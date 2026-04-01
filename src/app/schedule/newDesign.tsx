@@ -9,6 +9,7 @@ import { Navbar } from "@/components/stranger-things/Navbar";
 import StrangerThingsCard from "@/components/stranger-things/timelinecard"; 
 import StoneSlabSchedule from "@/components/stranger-things/StoneslabSchedule";
 import ScheduleTable from "@/components/stranger-things/ScheduleTable";
+import { OFFLINE_SCHEDULE, ONLINE_SCHEDULE } from "@/data/scheduleData";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,6 +27,8 @@ export default function SchedulePage() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isTableView, setIsTableView] = useState(false);
+    const [scheduleMode, setScheduleMode] = useState<'offline' | 'online'>('offline');
+    const activeScheduleData = scheduleMode === 'offline' ? OFFLINE_SCHEDULE : ONLINE_SCHEDULE;
 
     const sectionRef = useRef<HTMLElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -92,7 +95,7 @@ export default function SchedulePage() {
     // 🎬 GSAP + CANVAS
     // =========================
     useLayoutEffect(() => {
-        // Automatically destroy GSAP instance if the user switches to Native Table View
+        // Automatically destroy GSAP instance if the user switches to Native Table View or swaps Schedule data
         if (!isMounted || !isLoaded || isTableView) return;
 
         const ctx = gsap.context(() => {
@@ -153,6 +156,9 @@ export default function SchedulePage() {
 
             const playhead = { frame: 0 };
             let lastFrame = -1;
+            
+            // Dynamically scale the scroll distance based on how many timeline events exist so it never scrolls too fast or stops halfway
+            const pinDistance = activeScheduleData.length * 250;
 
             gsap.to(playhead, {
                 frame: totalFrames - 1,
@@ -160,7 +166,7 @@ export default function SchedulePage() {
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top top",
-                    end: "+=3500",
+                    end: `+=${pinDistance}`,
                     scrub: 1,
                     pin: true,
                     anticipatePin: 1,
@@ -184,11 +190,41 @@ export default function SchedulePage() {
         }, sectionRef);
 
         return () => ctx.revert();
-    }, [isMounted, isLoaded, isTableView]);
+    }, [isMounted, isLoaded, isTableView, scheduleMode]);
 
     return (
         <main className="relative bg-black min-h-screen overflow-x-hidden">
             <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} alwaysVisible />
+
+            {/* Horizontal Segmented Toggle Bar */}
+            {isLoaded && (
+                <div className="absolute top-[85px] md:top-[95px] flex flex-row p-1.5 bg-black/60 backdrop-blur-xl border border-red-900/40 ring-1 ring-red-500/20 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.8),0_0_20px_rgba(220,38,38,0.15)] z-[100] left-1/2 -translate-x-1/2">
+                    
+                    {/* Animated Sliding Active Background */}
+                    <div
+                        className={`absolute transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] bg-gradient-to-br from-red-600/80 to-red-900/80 border border-red-500/50 rounded-full z-0 shadow-[0_0_20px_rgba(220,38,38,0.5),inset_0_0_12px_rgba(255,255,255,0.2)] top-1.5 bottom-1.5 w-[calc(50%-6px)]
+                            ${scheduleMode === 'offline' ? 'left-1.5' : 'left-[50%]'}`}
+                    />
+
+                    <button
+                        onClick={() => setScheduleMode('offline')}
+                        className={`relative w-28 md:w-36 py-2.5 rounded-full transition-all duration-500 z-10 flex items-center justify-center group ${scheduleMode === 'offline' ? 'text-white' : 'text-neutral-400 hover:text-white'}`}
+                    >
+                        <span className={`text-[10px] md:text-xs font-bold tracking-[0.2em] transition-all duration-300 ${scheduleMode === 'offline' ? 'text-shadow-glow drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]' : 'group-hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]'}`}>
+                            OFFLINE
+                        </span>
+                    </button>
+
+                    <button
+                        onClick={() => setScheduleMode('online')}
+                        className={`relative w-28 md:w-36 py-2.5 rounded-full transition-all duration-500 z-10 flex items-center justify-center group ${scheduleMode === 'online' ? 'text-white' : 'text-neutral-400 hover:text-white'}`}
+                    >
+                        <span className={`text-[10px] md:text-xs font-bold tracking-[0.2em] transition-all duration-300 ${scheduleMode === 'online' ? 'text-shadow-glow drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]' : 'group-hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]'}`}>
+                            ONLINE
+                        </span>
+                    </button>
+                </div>
+            )}
 
             {/* =========================
                  🔄 VIEW TOGGLE (Cinematic View mode)
@@ -289,7 +325,7 @@ export default function SchedulePage() {
             ========================= */}
             <section
                 ref={sectionRef}
-                className={`relative w-full ${isTableView ? 'min-h-screen py-10' : 'h-screen overflow-hidden'}`}
+                className={`relative w-full ${isTableView ? 'min-h-screen py-10 pt-[150px]' : 'h-screen overflow-hidden'}`}
             >
                 {/* Static Fallback Background for Table View (Mobile AND Desktop) or just Mobile Cinematic */}
                 <div
@@ -338,7 +374,7 @@ export default function SchedulePage() {
                 {/* =========================
                      🧱 SCHEDULE VIEWS
                 ========================= */}
-                {isLoaded && !isTableView && <StoneSlabSchedule />}
+                {isLoaded && !isTableView && <StoneSlabSchedule scheduleData={activeScheduleData} mode={scheduleMode} key={scheduleMode} />}
                 
                 {isLoaded && isTableView && (
                     <div className="w-full relative z-40 max-w-6xl mx-auto px-4 md:px-8 pt-28 flex justify-end">
@@ -353,8 +389,19 @@ export default function SchedulePage() {
                         </button>
                     </div>
                 )}
-                {isLoaded && isTableView && <ScheduleTable />}
+                {isLoaded && isTableView && <ScheduleTable scheduleData={activeScheduleData} mode={scheduleMode} />}
             </section>
         </main>
     );
+}
+
+// Add global glow utility class dynamically if it doesn't exist
+if (typeof document !== 'undefined') {
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .text-shadow-glow {
+            text-shadow: 0 0 10px rgba(255,0,0,0.6);
+        }
+    `;
+    document.head.appendChild(style);
 }

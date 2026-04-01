@@ -361,7 +361,7 @@ export default function HeroScroll({ isMenuOpen, externalLoaded, externalProgres
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 mt-8 lg:mt-10 items-center md:justify-start">
                                 {/* <CustomButton link="https://hacknovate07.devfolio.co/" buttonText="Apply with Devfolio" imageSrc="/devfolio.png" width="180px" height="56px" iconSize="34px" gap="-2px" applyInvert={true} /> */}
-                                <CustomButton link="https://discord.gg/qxFmdeYCT" buttonText="Join Discord" imageSrc="/discord-logo.svg" width="250px" height="56px" iconSize="24px" applyInvert={false} />
+                                <CustomButton link="https://discord.gg/DYbbxnvc3q" buttonText="Join Discord" imageSrc="/discord-logo.svg" width="250px" height="56px" iconSize="24px" applyInvert={false} />
                             </div>
                             <div className="md:hidden mt-8 flex justify-center relative z-[25] pb-10">
                                 <CountdownTimer isMenuOpen={isMenuOpen} />

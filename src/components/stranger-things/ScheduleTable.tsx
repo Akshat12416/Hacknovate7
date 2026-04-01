@@ -2,9 +2,9 @@
 
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { SCHEDULE } from "./scheduleData";
+import { ScheduleEvent } from "../../data/scheduleData";
 
-export default function ScheduleTable() {
+export default function ScheduleTable({ scheduleData, mode }: { scheduleData: ScheduleEvent[], mode: 'offline' | 'online' }) {
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, margin: "-50px" });
 
@@ -13,7 +13,7 @@ export default function ScheduleTable() {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.3 }
+      transition: { staggerChildren: 0.04, delayChildren: 0.1 }
     }
   };
 
@@ -40,9 +40,15 @@ export default function ScheduleTable() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="text-center mb-10 pt-4"
       >
-        <h2 className="text-4xl md:text-6xl text-white font-benguiat drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] tracking-wide">
-          Timeline
-        </h2>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+          <h2 className="text-4xl md:text-6xl text-white font-benguiat drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] tracking-wide">
+            Timeline
+          </h2>
+          <div className="px-3 py-1.5 rounded-full border border-red-500/50 bg-red-950/80 text-red-200 text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase shadow-[0_0_15px_rgba(255,0,0,0.5)] flex items-center gap-2">
+            <span className={`w-2 h-2 rounded-full ${mode === 'online' ? 'bg-red-400 animate-pulse shadow-[0_0_8px_rgba(255,0,0,0.8)]' : 'bg-red-600'}`}></span>
+            {mode} Mode
+          </div>
+        </div>
         <motion.div 
           initial={{ scaleX: 0 }}
           animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
@@ -59,18 +65,20 @@ export default function ScheduleTable() {
       >
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-gradient-to-r from-red-950/90 to-black border-b border-red-800/60 shadow-lg relative z-10">
+            <tr className="bg-gradient-to-r from-red-950/90 to-black border-b border-red-800/60 shadow-lg relative z-10 flex-col md:table-row">
               <th className="p-5 md:p-6 text-red-500 font-black uppercase tracking-[0.2em] text-xs md:text-sm border-r border-red-900/30 w-1/4">Date & Time</th>
-              <th className="p-5 md:p-6 text-red-500 font-black uppercase tracking-[0.2em] text-xs md:text-sm w-3/4">Operational Phase</th>
+              <th className="p-5 md:p-6 text-red-500 font-black uppercase tracking-[0.2em] text-xs md:text-sm border-r border-red-900/30 w-1/2">Description</th>
+              <th className="p-5 md:p-6 text-red-500 font-black uppercase tracking-[0.2em] text-xs md:text-sm w-1/4">Venue</th>
             </tr>
           </thead>
           <motion.tbody 
+            key={mode}
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "show" : "hidden"}
             className="divide-y divide-red-900/20"
           >
-            {SCHEDULE.map((item, idx) => (
+            {scheduleData.map((item, idx) => (
               <motion.tr 
                 key={idx} 
                 variants={rowVariants}
@@ -90,12 +98,18 @@ export default function ScheduleTable() {
                     </span>
                   </div>
                 </td>
-                <td className="p-5 md:p-6 align-middle relative">
+                <td className="p-5 md:p-6 align-middle relative border-r border-red-900/20">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-xl md:text-3xl text-white/90 font-benguiat group-hover:text-white transition-colors duration-300 drop-shadow-sm group-hover:drop-shadow-[0_0_15px_rgba(200,0,0,0.6)]">
+                    <h3 className="text-lg md:text-xl xl:text-2xl text-white/90 font-benguiat group-hover:text-white transition-colors duration-300 drop-shadow-sm group-hover:drop-shadow-[0_0_15px_rgba(200,0,0,0.6)]">
                       {item.title}
                     </h3>
-                    
+                  </div>
+                </td>
+                <td className="p-5 md:p-6 align-middle relative">
+                  <div className="flex items-center justify-between h-full">
+                    <span className="text-red-200 uppercase tracking-widest text-xs md:text-sm font-semibold">
+                      {item.venue}
+                    </span>
                     {/* Animated trailing indicator arrow that slides in on hover */}
                     <motion.div 
                       initial={{ opacity: 0, x: -10 }}

@@ -1,0 +1,53 @@
+export type ScheduleSide = "left" | "right";
+
+export interface ScheduleEvent {
+  title: string;
+  time: string;
+  day: string;
+  venue: string;
+  side: ScheduleSide;
+}
+
+export const OFFLINE_SCHEDULE: ScheduleEvent[] = [
+  { title: "Participants Check-in", time: "08:30 AM - 09:30 AM", day: "DAY 1 • 3rd April 2026", venue: "Registration Desk (Registrar Office)", side: "left" },
+  { title: "Inauguration Ceremony", time: "09:30 AM - 10:30 AM", day: "DAY 1 • 3rd April 2026", venue: "Auditorium", side: "right" },
+  { title: "Hacking Begins", time: "10:30 AM", day: "DAY 1 • 3rd April 2026", venue: "2F01, 2F07 & 2F32", side: "left" },
+  { title: "Mentoring Round 1", time: "11:00 AM - 01:00 PM", day: "DAY 1 • 3rd April 2026", venue: "2F01, 2F07 & 2F32", side: "right" },
+  { title: "Lunch", time: "12:30 PM - 02:00 PM", day: "DAY 1 • 3rd April 2026", venue: "YogaHall", side: "left" },
+  { title: "Hacking", time: "02:00 PM - 05:30 PM", day: "DAY 1 • 3rd April 2026", venue: "2F01, 2F07 & 2F32", side: "right" },
+  // { title: "Workshop 1", time: "02:00 PM - 02:30 PM", day: "DAY 1 • 3rd April 2026", venue: "2F01, 2F07 & 2F32", side: "left" },
+  { title: "Workshop 1", time: "05:30 PM - 06:00 PM", day: "DAY 1 • 3rd April 2026", venue: "2F01, 2F07 & 2F32", side: "right" },
+  { title: "Evaluation Round 1", time: "06:00 PM - 08:00 PM", day: "DAY 1 • 3rd April 2026", venue: "2F01, 2F07 & 2F32", side: "left" },
+  { title: "Dinner", time: "08:00 PM - 09:00 PM", day: "DAY 1 • 3rd April 2026", venue: "YogaHall", side: "right" },
+  { title: "Mentoring Round 2", time: "09:00 PM - 10:30 PM", day: "DAY 1 • 3rd April 2026", venue: "2F01, 2F07 & 2F32", side: "left" },
+  { title: "Mini Event (Quiz & BGMI )", time: "10:30 PM - 12:00 AM", day: "DAY 1 • 3rd April 2026", venue: "2F01, 2F07 & 2F32", side: "right" },
+  { title: "Hacking", time: "12:00 AM - 02:00 AM", day: "DAY 2 • 4th April 2026", venue: "2F01, 2F07 & 2F32", side: "left" },
+  { title: "Midnight Snacks", time: "01:30 AM - 02:00 AM", day: "DAY 2 • 4th April 2026", venue: "2F01, 2F07 & 2F32", side: "right" },
+  { title: "Jamming Session", time: "02:00 AM - 02:30 AM", day: "DAY 2 • 4th April 2026", venue: "2nd Floor", side: "left" },
+  { title: "Hacking", time: "02:30 AM - 04:00 AM", day: "DAY 2 • 4th April 2026", venue: "2F01, 2F07 & 2F32", side: "right" },
+  { title: "Mini Event (Yoga & Fun activities)", time: "04:00 AM - 05:00 AM", day: "DAY 2 • 4th April 2026", venue: "2F01, 2F07 & 2F32", side: "left" },
+  { title: "Hacking", time: "05:00 AM - 07:00 AM", day: "DAY 2 • 4th April 2026", venue: "2F01, 2F07 & 2F32", side: "right" },
+  { title: "Breakfast", time: "07:00 AM - 08:00 AM", day: "DAY 2 • 4th April 2026", venue: "Yoga Hall", side: "left" },
+  { title: "Evaluation Round 2", time: "08:00 AM - 10:30 AM", day: "DAY 2 • 4th April 2026", venue: "2F01, 2F07 & 2F32", side: "right" },
+  { title: "Submission Start", time: "10:30 AM", day: "DAY 2 • 4th April 2026", venue: "Devfolio", side: "left" },
+  { title: "Final Judgement Round", time: "10:30 AM - 12:30 PM", day: "DAY 2 • 4th April 2026", venue: "2F01, 2F07 & 2F32", side: "right" },
+  { title: "WorkShop 2", time: "12:00 PM - 12:30 PM", day: "DAY 2 • 4th April 2026", venue: "2F02", side: "left" },
+  { title: "Lunch", time: "12:30 PM - 01:30 PM", day: "DAY 2 • 4th April 2026", venue: "Yogahall", side: "right" },
+  { title: "Submission End", time: "01:30 PM", day: "DAY 2 • 4th April 2026", venue: "Devfolio", side: "left" },
+  { title: "Result Announcement & Valedictory Ceremony", time: "02:00 PM - 03:00 PM", day: "DAY 2 • 4th April 2026", venue: "Auditorium", side: "right" },
+];
+
+export const ONLINE_SCHEDULE: ScheduleEvent[] = [
+  { title: "Check-in", time: "08:30 AM - 11:30 AM", day: "DAY 1 • 3rd April 2026", venue: "Online (Discord)", side: "left" },
+  { title: "PPT and Video Submission (Elimination Round)", time: "11:30 AM - 01:30 PM", day: "DAY 1 • 3rd April 2026", venue: "Online", side: "right" },
+  { title: "Evaluation", time: "01:30 PM - 05:00 PM", day: "DAY 1 • 3rd April 2026", venue: "Online Platform", side: "left" },
+  { title: "Workshop (Algorand)", time: "05:30 PM - 06:00 PM", day: "DAY 1 • 3rd April 2026", venue: "Online Stream", side: "right" },
+  { title: "Evaluation Result Announcement", time: "05:45 PM", day: "DAY 1 • 3rd April 2026", venue: "Discord", side: "left" },
+  { title: "Mentoring Round", time: "06:00 PM - 10:00 PM", day: "DAY 1 • 3rd April 2026", venue: "Online Sessions", side: "left" },
+  { title: "Hacking Time", time: "10:00 PM - 06:00 AM", day: "DAY 2 • 4th April 2026", venue: "Online", side: "right" },
+  { title: "Devfolio Submission (Pre)", time: "06:00 AM - 08:00 AM", day: "DAY 2 • 4th April 2026", venue: "Devfolio", side: "left" },
+  { title: "Mentor Round Result", time: "09:00 AM", day: "DAY 2 • 4th April 2026", venue: "Discord", side: "right" },
+  { title: "Judgement Round", time: "10:00 AM - 12:00 PM", day: "DAY 2 • 4th April 2026", venue: "Online Sessions", side: "left" },
+  { title: "Devfolio Submission End", time: "01:00 PM", day: "DAY 2 • 4th April 2026", venue: "Devfolio", side: "right" },
+  { title: "Final Result Announcement", time: "02:00 PM - 03:00 PM", day: "DAY 2 • 4th April 2026", venue: "Online Stream", side: "left" },
+];

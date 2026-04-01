@@ -2,9 +2,9 @@
 
 import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
-import { SCHEDULE } from "./scheduleData";
+import { ScheduleEvent } from "../../data/scheduleData";
 
-const StoneSlabSchedule: React.FC = () => {
+const StoneSlabSchedule: React.FC<{ scheduleData: ScheduleEvent[], mode: 'offline' | 'online' }> = ({ scheduleData, mode }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ const StoneSlabSchedule: React.FC = () => {
       const items = gsap.utils.toArray<HTMLElement>(".timeline-item");
       if (!listContainer || !items.length) return;
 
-      const totalElements = SCHEDULE.length;
+      const totalElements = scheduleData.length;
 
       // Ensure first initialization renders correctly at progress 0
       gsap.set(items, { opacity: 0.15, filter: "blur(4px)", scale: 0.75 });
@@ -65,7 +65,7 @@ const StoneSlabSchedule: React.FC = () => {
           // Text shifts outward slightly when focused for an organic 'popping' feel
           const textGroup = item.querySelector(".timeline-text");
           const shiftValue = isMobile ? 5 : 15;
-          const shiftDir = SCHEDULE[i].side === "left" ? -shiftValue : shiftValue;
+          const shiftDir = scheduleData[i].side === "left" ? -shiftValue : shiftValue;
           gsap.to(textGroup, {
             x: isActive ? shiftDir : 0,
             duration: 0.4,
@@ -119,19 +119,25 @@ const StoneSlabSchedule: React.FC = () => {
       <div className="absolute top-0 bottom-0 left-[50%] w-[3px] -translate-x-1/2 bg-gradient-to-b from-transparent via-red-800/40 to-transparent shadow-[0_0_20px_rgba(220,20,20,0.3)] z-0" />
 
       {/* Strong top mask to prevent scrolling items from sliding visibly under the heading */}
-      <div className="absolute top-0 left-0 right-0 h-[180px] md:h-[240px] bg-gradient-to-b from-[#0a0000] via-black/90 to-transparent z-40 pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-[200px] md:h-[260px] bg-gradient-to-b from-[#0a0000] via-black/90 to-transparent z-40 pointer-events-none" />
 
       {/* Fixed Title Header overlaying cinematic stream */}
-      <h2 
-        className="absolute top-[95px] md:top-[110px] lg:top-[115px] left-1/2 -translate-x-1/2 text-4xl md:text-6xl lg:text-6xl text-red-600 font-benguiat font-black uppercase tracking-wide drop-shadow-[0_0_15px_rgba(220,20,20,0.8)] animate-[flicker_3s_infinite] z-50 pointer-events-none"
-        style={{ textShadow: "2px 3px 6px rgba(0,0,0,1)" }}
-      >
-        Timeline
-      </h2>
+      <div className="flex flex-col items-center gap-2 md:gap-3 absolute top-[95px] md:top-[110px] lg:top-[115px] left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+        <h2 
+          className="text-4xl md:text-6xl lg:text-6xl text-red-600 font-benguiat font-black uppercase tracking-wide drop-shadow-[0_0_15px_rgba(220,20,20,0.8)] animate-[flicker_3s_infinite]"
+          style={{ textShadow: "2px 3px 6px rgba(0,0,0,1)" }}
+        >
+          Timeline
+        </h2>
+        <div className="px-3 py-1.5 rounded-full border border-red-500/50 bg-red-950/80 text-red-200 text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase shadow-[0_0_15px_rgba(255,0,0,0.5)] flex items-center gap-2 backdrop-blur-md">
+          <span className={`w-2 h-2 rounded-full ${mode === 'online' ? 'bg-red-400 animate-pulse shadow-[0_0_8px_rgba(255,0,0,0.8)]' : 'bg-red-600'}`}></span>
+          {mode} Mode
+        </div>
+      </div>
 
       {/* The timeline list container that moves up/down globally */}
       <div className="timeline-list absolute top-0 left-0 w-full flex flex-col items-center">
-        {SCHEDULE.map((item, i) => (
+        {scheduleData.map((item, i) => (
           <div
             key={i}
             className="timeline-item group cursor-pointer hover:z-30 flex w-full max-w-5xl min-h-[140px] md:min-h-[160px] relative z-10"
