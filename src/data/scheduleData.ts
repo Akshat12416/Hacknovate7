@@ -40,7 +40,7 @@ export const OFFLINE_SCHEDULE: ScheduleEvent[] = [
 export const ONLINE_SCHEDULE: ScheduleEvent[] = [
   { title: "Check-in", time: "08:30 AM - 11:00 AM", day: "DAY 1 • 3rd April 2026", venue: "Online (Discord)", side: "left" },
   { title: "PPT & Video Submission", time: "11:00 AM - 01:00 PM", day: "DAY 1 • 3rd April 2026", venue: "Online Platform", side: "right" },
-  { title: "Evaluation Round 1(Elimination Round)", time: "11:00 AM - 05:00 PM", day: "DAY 1 • 3rd April 2026", venue: "Online Platform", side: "left" },
+  { title: "Evaluation Round 1(Elimination Round)", time: "01:00 PM - 05:00 PM", day: "DAY 1 • 3rd April 2026", venue: "Online Platform", side: "left" },
   { title: "Workshop (Algorand)", time: "05:30 PM - 06:00 PM", day: "DAY 1 • 3rd April 2026", venue: "Online Stream", side: "right" },
   { title: "Evaluation Round 1 Result", time: "06:00 PM", day: "DAY 1 • 3rd April 2026", venue: "Discord", side: "left" },
   { title: "Mentoring & Evaluation Round 2", time: "06:15 PM - 10:00 PM", day: "DAY 1 • 3rd April 2026", venue: "Online Sessions", side: "right" },
@@ -49,5 +49,5 @@ export const ONLINE_SCHEDULE: ScheduleEvent[] = [
   { title: "Evaluation Round 2 Result", time: "09:00 AM", day: "DAY 2 • 4th April 2026", venue: "Discord", side: "left" },
   { title: "Final Judgement Round", time: "09:30 AM - 12:00 AM", day: "DAY 2 • 4th April 2026", venue: "Online Sessions", side: "right" },
   { title: "Devfolio Submission End", time: "01:00 PM", day: "DAY 2 • 4th April 2026", venue: "Devfolio", side: "left" },
-  { title: "Final Result Announcement", time: "02:00 PM - 03:00 PM", day: "DAY 2 • 4th April 2026", venue: "Online Stream", side: "right" },
+  { title: "Final Result Announcement", time: "03:00 PM - 4:30 PM", day: "DAY 2 • 4th April 2026", venue: "Online Stream", side: "right" },
 ];
